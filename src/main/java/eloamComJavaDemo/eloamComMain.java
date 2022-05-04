@@ -110,10 +110,6 @@ public class eloamComMain {
 		});
 
 
-
-
-
-
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		gridLayout.makeColumnsEqualWidth = false;
