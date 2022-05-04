@@ -110,18 +110,6 @@ public class eloamComMain {
 		});
 
 
-		//test
-		//输入框 实验地点，样品编号
-		PlaceLabel = new Label(shell,SWT.NONE);
-		PlaceLabel.setText("实验地点：");
-//		PlaceLabel.setBounds(65, 100, 40,20);
-
-
-
-		SampleLabel = new Label(shell,SWT.NONE);
-		SampleLabel.setText("样品编号：");
-//		SampleLabel.setBounds(65, 165, 40, 20);
-
 
 
 
@@ -139,8 +127,23 @@ public class eloamComMain {
 		group.setLayout(new RowLayout(SWT.VERTICAL));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 2));
 
+
+		//test
+		//输入框 实验地点，样品编号
+		PlaceLabel = new Label(group,SWT.NONE);
+		PlaceLabel.setText("实验地点：");
+//		PlaceLabel.setBounds(65, 100, 40,20);
+
+		SampleText = new Text(group, SWT.SINGLE);
+
+		SampleLabel = new Label(group,SWT.NONE);
+		SampleLabel.setText("样品编号：");
+//		SampleLabel.setBounds(65, 165, 40, 20);
+		PlaceText = new Text(group, SWT.SINGLE);
+
 		devicelListLabel = new Label(group, SWT.NONE);
 		devicelListLabel.setText("设备列表:");
+
 
 		deviceCombo = new Combo(group, SWT.READ_ONLY);
 		deviceCombo.addSelectionListener(new SelectionAdapter() {
@@ -334,6 +337,8 @@ public class eloamComMain {
 
 				Thread tRecord = new Thread();
 				Thread tPhoto = new Thread();
+
+
 
 				tRecord = new Thread(() -> {
 					long A  = 60;
