@@ -341,7 +341,7 @@ public class eloamViewOCX {
 	public boolean StartRecord(String FilePath, long iFrameRate) {
 		int mid[] = _auto.getIDsOfNames(new String[] { "StartRecord" });
 //		int mid2[] = _auto.getIDsOfNames(new String[] { "SaveFileByBase64" });
-		System.out.println(mid[0]);
+//		System.out.println(mid[0]);
 //		System.out.println(mid2[0]);
 		int id = mid[0];
 
@@ -351,7 +351,7 @@ public class eloamViewOCX {
 		rgvarg[0] = new Variant(FilePath);
 		rgvarg[1] = new Variant(iFrameRate);
 		Variant ret = _auto.invoke(id, rgvarg);
-		System.out.println(ret);
+//		System.out.println(ret);
 
 		return ret.getBoolean();
 	}
@@ -360,13 +360,12 @@ public class eloamViewOCX {
 	public void StopRecord() {
 		int mid[] = _auto.getIDsOfNames(new String[] { "StopRecord" });
 		int id = mid[0];
-		System.out.println(id);
 
 		if (id < 0)
 			return ;
 		Variant[] rgvarg = new Variant[0];
 		Variant ret = _auto.invoke(id,rgvarg);
-		System.out.println(ret);
+		System.out.println("10s Record Stop");
 
 		//return ret;
 

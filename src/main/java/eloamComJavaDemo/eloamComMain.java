@@ -8,6 +8,9 @@ package eloamComJavaDemo;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,13 +20,7 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 
 public class eloamComMain {
 	//1
@@ -35,6 +32,15 @@ public class eloamComMain {
 	private String[] devs = {"0-主摄像头", "1-副摄像头"};// 设备列表
 
 	private Shell shell;
+
+	//输入框 实验地点，样品编号
+	Label PlaceLabel;
+	Text PlaceText;
+
+	Label SampleLabel;
+	Text SampleText;
+
+
 
 	private Label devicelListLabel;
 	private Combo deviceCombo;
@@ -52,8 +58,9 @@ public class eloamComMain {
 	private Button rotate180Btn;
 	private Button rotate270Btn;
 	private Button attributeBtn;
-	private Button StartRecordBtn;
-	private Button StopRecordBtn;
+	private Button StartRecordBtn; //开始摄像按钮
+	private Button StopRecordBtn;//结束摄像按钮
+	private Button RecordAndPhotoBtn;//结束摄像按钮
 	private Button takingPicturesBtn;
 
 	private Button getBase64Btn;
@@ -101,6 +108,22 @@ public class eloamComMain {
 				releaseDevices();
 			}
 		});
+
+
+		//输入框 实验地点，样品编号
+		PlaceLabel = new Label(shell,SWT.NONE);
+		PlaceLabel.setText("实验地点：");
+//		PlaceLabel.setBounds(65, 100, 40,20);
+
+
+
+		SampleLabel = new Label(shell,SWT.NONE);
+		SampleLabel.setText("样品编号：");
+//		SampleLabel.setBounds(65, 165, 40, 20);
+
+
+
+
 
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
@@ -278,7 +301,7 @@ public class eloamComMain {
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
 				long A  = 60;
-				boolean ret = ocx1.StartRecord("E:\\record\\1.mp4",A);
+				boolean ret = ocx1.StartRecord("E:\\zmj\\record\\1.mp4",A);
 				if(ret) {
 					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
 				}else{
@@ -300,7 +323,60 @@ public class eloamComMain {
 			}
 		});
 
+		//拍照录像代码
 
+		RecordAndPhotoBtn = new Button(group, SWT.NONE);
+		RecordAndPhotoBtn.setText("拍照&录像");
+		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e) {
+				Device = deviceCombo.getSelectionIndex();
+
+				Thread tRecord = new Thread();
+				Thread tPhoto = new Thread();
+
+				tRecord = new Thread(() -> {
+					long A  = 60;
+					boolean ret = ocx1.StartRecord("E:\\zmj\\record\\12.mp4",A);
+					if(ret) {
+						System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+					}else{
+						System.out.println("ocx1.StartRecord(Device) ret:null" );
+					}
+					try {
+						Thread.sleep(11000);
+					} catch (InterruptedException interruptedException) {
+						interruptedException.printStackTrace();
+					}
+					ocx1.StopRecord();
+
+				});
+				tPhoto = new Thread(() -> {
+					for (int i=0;i<10;i++){
+						Date dt = new Date();
+						DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+						String nowTime = "";
+						nowTime = df.format(dt);
+
+						String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
+						boolean ret = ocx1.Scan(Device, fileName, 0);
+						System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+						if(ret) {
+							ocx2.Add(fileName);
+						}
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException interruptedException) {
+							interruptedException.printStackTrace();
+						}
+					}
+
+				});
+				tRecord.start();
+				tPhoto.start();
+
+				//没返回值
+			}
+		});
 
 
 		CheckDeskewBtn = new Button(group, SWT.CHECK);
@@ -366,12 +442,14 @@ public class eloamComMain {
 				String nowTime = "";
 				nowTime = df.format(dt);
 
-				String fileName = "D:\\" + nowTime + ".jpg";
+				String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
 
 				boolean ret = ocx1.Scan(Device, fileName, 0);
 				if(ret) {
 					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
 					ocx2.Add(fileName);
+				}else{
+					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
 				}
 			}
 		});
