@@ -59,6 +59,9 @@ public class eloamComMain {
 	private Button openBtn;
 	private Button closeBtn;
 
+	
+
+
 	private Button rotate90Btn;
 	private Button rotate180Btn;
 	private Button rotate270Btn;
