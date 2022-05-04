@@ -110,6 +110,7 @@ public class eloamComMain {
 		});
 
 
+		//test
 		//输入框 实验地点，样品编号
 		PlaceLabel = new Label(shell,SWT.NONE);
 		PlaceLabel.setText("实验地点：");
