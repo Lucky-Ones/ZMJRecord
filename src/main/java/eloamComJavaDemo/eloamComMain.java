@@ -130,6 +130,7 @@ public class eloamComMain {
 
 		//test
 		//输入框 实验地点，样品编号
+		//加入文本框
 		PlaceLabel = new Label(group,SWT.NONE);
 		PlaceLabel.setText("实验地点：");
 //		PlaceLabel.setBounds(65, 100, 40,20);
