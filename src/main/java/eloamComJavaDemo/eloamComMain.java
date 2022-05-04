@@ -5,6 +5,7 @@
 /*运行时请选择[run],[run As ], [JAVA Application]*/
 package eloamComJavaDemo;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import eloamComJavaDemo.utils.AreaCalculation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,6 +23,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.*;
+import org.opencv.core.Mat;
+
+import static org.opencv.imgcodecs.Imgcodecs.imread;
 
 public class eloamComMain {
 	//1
@@ -78,6 +83,20 @@ public class eloamComMain {
 		demo.open();
 	}
 
+	//计算面积函数
+	public String getArea(String sPicName) throws Exception{
+//		String sPicName = "C:\\Users\\83811\\Desktop\\5.jpg";
+		System.out.println(sPicName);
+		URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+		System.load(url.getPath());
+		AreaCalculation areaCalculation = new AreaCalculation();//计算面积
+		Mat image = imread(sPicName, 1);
+		double area = areaCalculation.getArea(image,"OTSU",150);//面积
+		String arean = String.valueOf(area);
+		System.out.println("芝麻酱面积"+arean);
+		return arean;
+	}
+
 	public void open() {
 
 //		EloamGlobal = null;
@@ -126,7 +145,6 @@ public class eloamComMain {
 
 		//test
 		//输入框 实验地点，样品编号
-		//加入文本框
 		PlaceLabel = new Label(group,SWT.NONE);
 		PlaceLabel.setText("实验地点：");
 //		PlaceLabel.setBounds(65, 100, 40,20);
@@ -327,56 +345,86 @@ public class eloamComMain {
 		//拍照录像代码
 
 		RecordAndPhotoBtn = new Button(group, SWT.NONE);
-		RecordAndPhotoBtn.setText("拍照&录像");
+		RecordAndPhotoBtn.setText("拍照and录像");
 		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e) {
+			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e)  {
 				Device = deviceCombo.getSelectionIndex();
 
-				Thread tRecord = new Thread();
-				Thread tPhoto = new Thread();
+
+				String sampleText = SampleText.getText();//样品编号
+				String placeText = PlaceText.getText();//实验地点
 
 
+				if (sampleText.isEmpty() || placeText.isEmpty()) {
+					MessageBox mb = new MessageBox(shell,SWT.NONE);
+					mb.setText("提示");
+					mb.setMessage("实验地点或样品编号未填写");
+					mb.open();
+				}
+				else{
+					System.out.println("实验地点:"+placeText);
+					System.out.println("样品编号:"+sampleText);
 
-				tRecord = new Thread(() -> {
-					long A  = 60;
-					boolean ret = ocx1.StartRecord("E:\\zmj\\record\\12.mp4",A);
-					if(ret) {
-						System.out.println("ocx1.StartRecord(Device) ret:" + ret);
-					}else{
-						System.out.println("ocx1.StartRecord(Device) ret:null" );
-					}
-					try {
-						Thread.sleep(11000);
-					} catch (InterruptedException interruptedException) {
-						interruptedException.printStackTrace();
-					}
-					ocx1.StopRecord();
 
-				});
-				tPhoto = new Thread(() -> {
-					for (int i=0;i<10;i++){
-						Date dt = new Date();
-						DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-						String nowTime = "";
-						nowTime = df.format(dt);
+					Thread tRecordAndPhoto;
 
-						String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
-						boolean ret = ocx1.Scan(Device, fileName, 0);
-						System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
-						if(ret) {
-							ocx2.Add(fileName);
-						}
+					tRecordAndPhoto = new Thread(() ->{
 						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException interruptedException) {
-							interruptedException.printStackTrace();
+							Date dt1 = new Date();
+							DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+							String nowTime1 = "";
+							nowTime1 = df1.format(dt1);
+							String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";
+							long A  = 60;
+							boolean ret = ocx1.StartRecord(fileName1,A);
+							if(ret) {
+								System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+							}else{
+								System.out.println("ocx1.StartRecord(Device) ret:null" );
+							}
+							for (int i=0;i<10;i++){//这里设置拍10张照片，数据库连接好后改为死循环
+								Date dt = new Date();
+								DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+								String nowTime = "";
+								nowTime = df.format(dt);
+
+								String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
+								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
+								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+								if(ret2) {
+									ocx2.Add(fileName2);
+								}
+								String area = getArea(fileName2);//这次面积数值
+								//存储数据库：
+								//sampleText 样品编号变量
+								//placeText 实验地点变量
+								//area  这次面积变量
+
+
+
+								//读取上一次面积：
+								String upArea = "100.1";
+
+
+
+
+								//判断面积是一致：
+								if (area.equals(upArea)){
+									break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
+								}else{
+									Thread.sleep(2500);//等待2.5秒后继续拍照
+								}
+							}
+//							ocx1.StopRecord();
+						} catch (Exception exception) {
+							exception.printStackTrace();
+						}finally {
+							ocx1.StopRecord();
 						}
-					}
 
-				});
-				tRecord.start();
-				tPhoto.start();
-
+					});
+					tRecordAndPhoto.start();
+				}
 				//没返回值
 			}
 		});

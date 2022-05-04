@@ -21,6 +21,13 @@
             <version>4.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org</groupId>
+            <artifactId>opencv</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\src\main\resources\lib\opencv\opencv-455.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
 </project>
