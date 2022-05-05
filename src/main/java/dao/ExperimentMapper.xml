@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!--将xml第一行的UTF-8改为UTF8,因为配置文件有中文的报错神奇般的消失了-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.ExperimentMapper">
+
+    <insert id="addExperiment" parameterType="pojo.Experiment" useGeneratedKeys="true" keyProperty="experiment_id" >
+        INSERT INTO tb_experiment(equipment_id,video_name,video_site,start_time,place,sample_id)
+        VALUES (#{equipment_id},#{video_name},#{video_site},#{start_time},#{place},#{sample_id})
+    </insert>
+
+
+    <update id="updateExperiment" parameterType="pojo.Experiment">
+        update tb_experiment
+        set experiment_id=#{experiment_id},end_time=#{end_time},sample_area=#{sample_area},R1=#{R1},R2=#{R2},RM=#{RM},picture_id_1=#{picture_id_1},picture_id_2=#{picture_id_2}
+        where experiment_id = #{experiment_id}
+    </update>
+
+</mapper>

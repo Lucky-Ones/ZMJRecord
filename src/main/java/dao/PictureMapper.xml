@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!--将xml第一行的UTF-8改为UTF8,因为配置文件有中文的报错神奇般的消失了-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.PictureMapper">
+
+    <insert id="addPicture" parameterType="pojo.Picture" useGeneratedKeys="true" keyProperty="picture_id">
+        INSERT INTO tb_picture(picture_name,picture_time,picture_site,sample_area,experiment_id)
+        VALUES (#{picture_name},#{picture_time},#{picture_site},#{sample_area},#{experiment_id})
+    </insert>
+
+    <select id="getSampleAreaById" resultType="String">
+        select sample_area from tb_picture
+        WHERE picture_id = #{picture_id}
+    </select>
+
+    <select id="getSiteById" resultType="String">
+        select picture_site from tb_picture
+        WHERE picture_id = #{picture_id}
+    </select>
+
+</mapper>

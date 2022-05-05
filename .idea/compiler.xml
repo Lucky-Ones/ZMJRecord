@@ -9,5 +9,8 @@
         <module name="ZMJRecord" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ZMJRecord" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

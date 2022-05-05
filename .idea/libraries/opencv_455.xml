@@ -6,7 +6,6 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/src/main/resources/lib/opencv/opencv-455.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/opencv/opencv-455.jar!/" />
     </SOURCES>
   </library>
 </component>
