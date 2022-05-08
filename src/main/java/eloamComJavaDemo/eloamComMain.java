@@ -7,6 +7,7 @@ package eloamComJavaDemo;
 
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +92,8 @@ public class eloamComMain {
 
 	private Group group;
 
+
+
 	public static void main(String[] args) {
 		eloamComMain demo = new eloamComMain();
 		demo.open();
@@ -105,7 +108,8 @@ public class eloamComMain {
 		AreaCalculation areaCalculation = new AreaCalculation();//计算面积
 		Mat image = imread(sPicName, 1);
 		double area = areaCalculation.getArea(image,"OTSU",150);//面积
-		String arean = String.valueOf(area);
+        DecimalFormat df = new DecimalFormat("0");
+		String arean = String.valueOf(df.format(area));
 		System.out.println("芝麻酱面积"+arean);
 		return arean;
 	}
@@ -408,7 +412,7 @@ public class eloamComMain {
 							session1.close();
 
 
-							for (int i=0;i<10;i++){//这里设置拍10张照片，数据库连接好后改为死循环
+							for (int i=0;i<100000;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 								Date dt = new Date();
 								DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 								String nowTime = "";
@@ -457,7 +461,7 @@ public class eloamComMain {
 									String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
 									session5.close();
 									CircleCalculation circle = new CircleCalculation();
-									String picture_id_2 = picture_id+"out"+".jpg";
+									String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
 									ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
 									String R1 = String.valueOf(imageInfo.getR1());
 									String R2 = String.valueOf(imageInfo.getR2());

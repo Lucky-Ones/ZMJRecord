@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AreaCalculation {
+public class
+AreaCalculation {
     public double getArea(Mat image,String model,int thresh) throws Exception {
         double zmjArea;
         double relZmjArea;
