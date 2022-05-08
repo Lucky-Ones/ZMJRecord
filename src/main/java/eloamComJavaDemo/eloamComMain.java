@@ -23,10 +23,7 @@ import eloamComJavaDemo.utils.AreaCalculation;
 import eloamComJavaDemo.utils.CircleCalculation;
 import org.apache.ibatis.session.SqlSession;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -136,7 +133,7 @@ public class eloamComMain {
 	protected void createContents() {
 		shell = new Shell();
 		shell.setText("eloamComJavaDemo");
-		shell.setSize(800, 700);
+		shell.setSize(800, 750);
 		shell.addShellListener(new ShellAdapter() {
 
 			public void shellClosed(ShellEvent e) {
@@ -160,7 +157,8 @@ public class eloamComMain {
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 2));
 
 
-		//test
+
+
 		//输入框 实验地点，样品编号
 		PlaceLabel = new Label(group,SWT.NONE);
 		PlaceLabel.setText("实验地点：");
@@ -359,7 +357,145 @@ public class eloamComMain {
 			}
 		});
 
-		//拍照录像代码
+		//拍照录像空格监听代码
+		Display.getDefault().addFilter(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event e) {
+				if (e.keyCode == ' ' ) {
+					//让按键原有的功能失效
+					e.doit = false ;
+					//执行你自己的事件
+//					MessageBox box = new  MessageBox( new  Shell(), SWT.ICON_INFORMATION | SWT.OK);
+//					box.setText("提示信息" );
+//					box.setMessage("按空格键了" );
+//					box.open();
+					Device = deviceCombo.getSelectionIndex();
+
+					String sampleText = SampleText.getText();//样品编号
+					String placeText = PlaceText.getText();//实验地点
+					if (sampleText.isEmpty() || placeText.isEmpty()) {
+						MessageBox mb = new MessageBox(shell,SWT.NONE);
+						mb.setText("提示");
+						mb.setMessage("实验地点或样品编号未填写");
+						mb.open();
+					}
+					else{
+						System.out.println("实验地点:"+placeText);
+						System.out.println("样品编号:"+sampleText);
+						Thread tRecordAndPhoto;
+						tRecordAndPhoto = new Thread(() ->{
+							try {
+								Date dt1 = new Date();
+								DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+								String nowTime1 = "";
+								nowTime1 = df1.format(dt1);//start_time
+								String video_name = nowTime1 + ".mp4";//video_name
+								String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
+								long A  = 60;
+								boolean ret = ocx1.StartRecord(fileName1,A);
+								if(ret) {
+									System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+								}else{
+									System.out.println("ocx1.StartRecord(Device) ret:null" );
+								}
+
+								//增加一条实验数据，拿到返回的实验id
+								SqlSession session1 = MybatisUtils.getSession();
+								ExperimentMapper mapper1 = session1.getMapper(ExperimentMapper.class);
+
+								Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1,placeText,sampleText);
+								mapper1.addExperiment(experiment);
+								int experiment_id = experiment.getExperiment_id();//本次实验id:  experiment_id
+								session1.commit();
+								session1.close();
+
+
+								for (int i=0;i<100000;i++){//这里设置拍10张照片，数据库连接好后改为死循环
+									Date dt = new Date();
+									DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+									String nowTime = "";
+									nowTime = df.format(dt);
+
+									String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
+									String fileName3 = nowTime + ".jpg";
+									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
+									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+									if(ret2) {
+										ocx2.Add(fileName2);
+									}
+									String area = getArea(fileName2);//这次面积数值
+									//存储数据库：
+									//sampleText 样品编号变量
+									//placeText 实验地点变量
+									//area  这次面积变量
+
+									//插入图片，拿到本次图片id
+									SqlSession session2 = MybatisUtils.getSession();
+									PictureMapper mapper2 = session2.getMapper(PictureMapper.class);
+									Picture picture = new Picture(fileName3,nowTime,fileName2,area,experiment_id);
+									mapper2.addPicture(picture);
+									int picture_id = picture.getPicture_id();//本次图片id=picture_id，上次图片id=picture_id-1
+									session2.commit(); //提交事务
+									session2.close();
+
+									//读取上一次面积：
+									SqlSession session3 = MybatisUtils.getSession();
+									PictureMapper mapper = session3.getMapper(PictureMapper.class);
+									String agoArea= mapper.getSampleAreaById(picture_id-1);//上次图片的样品面积agoArea
+									session3.close();
+
+									//判断面积是一致：
+									if (area.equals(agoArea)){
+
+//									String R1="R1";
+//									="R2";
+//									String RM="RM";
+										//String picture_id_2="picture_id_2";//图片二地址
+
+										//根据图片id查找图片地址
+										SqlSession session5 = MybatisUtils.getSession();
+										PictureMapper mapper4 = session5.getMapper(PictureMapper.class);
+										String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
+										session5.close();
+										CircleCalculation circle = new CircleCalculation();
+										String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
+										ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
+										String R1 = String.valueOf(imageInfo.getR1());
+										String R2 = String.valueOf(imageInfo.getR2());
+										String RM = String.valueOf(imageInfo.getRm());
+
+										//面积一致则本次实验结束，更新实验数据
+										SqlSession session4 = MybatisUtils.getSession();
+										ExperimentMapper mapper3 = session4.getMapper(ExperimentMapper.class);
+										Experiment experiment2 = new Experiment(experiment_id,nowTime,area,R1,R2,RM,picture_id,picture_id_2);
+										mapper3.updateExperiment(experiment2);
+										session4.commit();
+										session4.close();
+
+
+										break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
+									}else{
+										Thread.sleep(2500);//等待2.5秒后继续拍照
+									}
+								}
+//							ocx1.StopRecord();
+							} catch (Exception exception) {
+								exception.printStackTrace();
+							}finally {
+								ocx1.StopRecord();
+							}
+
+						});
+						tRecordAndPhoto.start();
+					}
+
+
+				}
+			}
+		});
+
+
+
+		//拍照录像按钮代码
 
 		RecordAndPhotoBtn = new Button(group, SWT.NONE);
 		RecordAndPhotoBtn.setText("拍照and录像");

@@ -365,7 +365,7 @@ public class eloamViewOCX {
 			return ;
 		Variant[] rgvarg = new Variant[0];
 		Variant ret = _auto.invoke(id,rgvarg);
-		System.out.println("10s Record Stop");
+		System.out.println("Record Stop");
 
 		//return ret;
 
