@@ -246,76 +246,76 @@ public class eloamComMain {
 			}
 		});
 
-		openBtn = new Button(group, SWT.NONE);
-		openBtn.setText("预览视频");
-		openBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				if(ocx1 != null) {
-                    Device = deviceCombo.getSelectionIndex();
-                    int mode = modeCombo.getSelectionIndex();
-                    int resolution = resolutionCombo.getSelectionIndex();
-                    System.out.println("OpenVideoEx() device:" + Device);
-                    System.out.println("OpenVideoEx() mode:" + mode);
-                    System.out.println("OpenVideoEx() resolution:" + resolution);
-                    boolean ret = ocx1.OpenVideoEx(Device, mode, resolution);
-                    System.out.println("ocx1.OpenVideoEx() ret:" + ret);
-                    if(ret) {
-                    	System.out.println("ocx1.OpenVideo() success.");
-                    }
-				}
-			}
-		});
+//		openBtn = new Button(group, SWT.NONE);
+//		openBtn.setText("预览视频");
+//		openBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				if(ocx1 != null) {
+//                    Device = deviceCombo.getSelectionIndex();
+//                    int mode = modeCombo.getSelectionIndex();
+//                    int resolution = resolutionCombo.getSelectionIndex();
+//                    System.out.println("OpenVideoEx() device:" + Device);
+//                    System.out.println("OpenVideoEx() mode:" + mode);
+//                    System.out.println("OpenVideoEx() resolution:" + resolution);
+//                    boolean ret = ocx1.OpenVideoEx(Device, mode, resolution);
+//                    System.out.println("ocx1.OpenVideoEx() ret:" + ret);
+//                    if(ret) {
+//                    	System.out.println("ocx1.OpenVideo() success.");
+//                    }
+//				}
+//			}
+//		});
 
-		closeBtn = new Button(group, SWT.NONE);
-		closeBtn.setText("关闭视频");
-		closeBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				if (ocx1 != null) {
-					Device = deviceCombo.getSelectionIndex();
-                    boolean ret = ocx1.CloseVideo(Device);
-                    System.out.println("ocx1.CloseVideo() ret:" + ret);
-                    if(ret) {
-                    	System.out.println("ocx1.CloseVideo() success.");
-                    }
-				}
-			}
-		});
+//		closeBtn = new Button(group, SWT.NONE);
+//		closeBtn.setText("关闭视频");
+//		closeBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				if (ocx1 != null) {
+//					Device = deviceCombo.getSelectionIndex();
+//                    boolean ret = ocx1.CloseVideo(Device);
+//                    System.out.println("ocx1.CloseVideo() ret:" + ret);
+//                    if(ret) {
+//                    	System.out.println("ocx1.CloseVideo() success.");
+//                    }
+//				}
+//			}
+//		});
 
-		rotate90Btn = new Button(group, SWT.NONE);
-		rotate90Btn.setText("旋转90°");
-		rotate90Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean ret = ocx1.VideoRotate(Device, 0);
-				if(ret) {
-					System.out.println("ocx1.VideoRotate(Device, 90) ret:" + ret);
-				}
-			}
-		});
+//		rotate90Btn = new Button(group, SWT.NONE);
+//		rotate90Btn.setText("旋转90°");
+//		rotate90Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean ret = ocx1.VideoRotate(Device, 0);
+//				if(ret) {
+//					System.out.println("ocx1.VideoRotate(Device, 90) ret:" + ret);
+//				}
+//			}
+//		});
 
-		rotate180Btn = new Button(group, SWT.NONE);
-		rotate180Btn.setText("旋转180°");
-		rotate180Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean ret = ocx1.VideoRotate(Device, 1);
-				if(ret) {
-					System.out.println("ocx1.VideoRotate(Device, 180) ret:" + ret);
-				}
-			}
-		});
+//		rotate180Btn = new Button(group, SWT.NONE);
+//		rotate180Btn.setText("旋转180°");
+//		rotate180Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean ret = ocx1.VideoRotate(Device, 1);
+//				if(ret) {
+//					System.out.println("ocx1.VideoRotate(Device, 180) ret:" + ret);
+//				}
+//			}
+//		});
 
-		rotate270Btn = new Button(group, SWT.NONE);
-		rotate270Btn.setText("旋转270°");
-		rotate270Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean ret = ocx1.VideoRotate(Device, 2);
-				if(ret) {
-					System.out.println("ocx1.VideoRotate(Device, 270) ret:" + ret);
-				}
-			}
-		});
+//		rotate270Btn = new Button(group, SWT.NONE);
+//		rotate270Btn.setText("旋转270°");
+//		rotate270Btn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean ret = ocx1.VideoRotate(Device, 2);
+//				if(ret) {
+//					System.out.println("ocx1.VideoRotate(Device, 270) ret:" + ret);
+//				}
+//			}
+//		});
 
 		attributeBtn = new Button(group, SWT.NONE);
 		attributeBtn.setText("属性");
@@ -707,35 +707,35 @@ public class eloamComMain {
 			}
 		});
 
-		IDcardBtn = new Button(group, SWT.NONE);
-		IDcardBtn.setText("获取身份证信息");
-		IDcardBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-
-				Date dt = new Date();
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-				String nowTime = "";
-				nowTime = df.format(dt);
-				String fileName = "D:\\" + nowTime + ".jpg";
-//				boolean res = ocx1.StartIdcardReader();
-//				System.out.println("ocx1.StartIdcardReader() res:" + res);
-//				res = ocx1.StopIdcardReader();
-//				System.out.println("ocx1.StopIdcardReader() res:" + res);
+//		IDcardBtn = new Button(group, SWT.NONE);
+//		IDcardBtn.setText("获取身份证信息");
+//		IDcardBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 //
-//				String ret = ocx1.GetIdCardInfoEx(fileName);
-//				System.out.println("ocx1.GetIdCardInfoEx(fileName) ret:" + ret);
-				String ret = ocx1.GetIdCardInfo(fileName);
-				System.out.println("ocx1.GetIdCardInfo(fileName) ret:" + ret);
-				if (ret != null && ret.length() > 0) {
-					MessageBox dialog = new MessageBox(shell, SWT.OK | SWT.ICON_INFORMATION);
-					dialog.setText("读取成功");
-					dialog.setMessage(ret);
-					dialog.open();
-				} else {
-					System.out.println("读卡失败！");
-				}
-			}
-		});
+//				Date dt = new Date();
+//				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+//				String nowTime = "";
+//				nowTime = df.format(dt);
+//				String fileName = "D:\\" + nowTime + ".jpg";
+////				boolean res = ocx1.StartIdcardReader();
+////				System.out.println("ocx1.StartIdcardReader() res:" + res);
+////				res = ocx1.StopIdcardReader();
+////				System.out.println("ocx1.StopIdcardReader() res:" + res);
+////
+////				String ret = ocx1.GetIdCardInfoEx(fileName);
+////				System.out.println("ocx1.GetIdCardInfoEx(fileName) ret:" + ret);
+//				String ret = ocx1.GetIdCardInfo(fileName);
+//				System.out.println("ocx1.GetIdCardInfo(fileName) ret:" + ret);
+//				if (ret != null && ret.length() > 0) {
+//					MessageBox dialog = new MessageBox(shell, SWT.OK | SWT.ICON_INFORMATION);
+//					dialog.setText("读取成功");
+//					dialog.setMessage(ret);
+//					dialog.open();
+//				} else {
+//					System.out.println("读卡失败！");
+//				}
+//			}
+//		});
 
 		ocx2 = new eloamThumbnailOCX();
 		ocx2.InitOcx(shell);
