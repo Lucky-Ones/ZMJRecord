@@ -25,13 +25,15 @@ public class CircleCalculation {
     //静态代码块加载动态链接库
     static {
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+//        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+        URL url = ClassLoader.getSystemResource(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
         System.setProperty("java.awt.headless", "false");
-        System.load(url.getPath());
+        System.load(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
     }
     //霍夫变换圆形检测
     public void houghCircles(String[] args) {
-        Mat src = Imgcodecs.imread("D:\\opencvImage\\basketball.jpg");
+//        Mat src = Imgcodecs.imread("D:\\opencvImage\\basketball.jpg");
+        Mat src = Imgcodecs.imread(System.getProperty("exe.path")+"\\opencvImage\\basketball.jpg");
 
         Mat dst = src.clone();
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY);
@@ -50,7 +52,8 @@ public class CircleCalculation {
             Imgproc.circle(src, center, radius, new Scalar(0, 255, 0), 3, 8, 0);
 
         }
-        Imgcodecs.imwrite("D:\\opencvImage\\basketball111.jpg", src);
+//        Imgcodecs.imwrite("D:\\opencvImage\\basketball111.jpg", src);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"\\opencvImage\\basketball111.jpg", src);
         HighGui.imshow("圆形检测", src);
         HighGui.waitKey();
     }
@@ -82,7 +85,8 @@ public class CircleCalculation {
         //二值化
         Mat threshold = new Mat();
         Imgproc.threshold(dilate,threshold,0,255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
-        Imgcodecs.imwrite("D:\\opencvImage\\binarization.jpg", threshold);
+//        Imgcodecs.imwrite("D:\\opencvImage\\binarization.jpg", threshold);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"\\opencvImage\\binarization.jpg", threshold);
 
         //index=1,面积第二大的区域
         ImageInfo imageInfo = findContoursAndDraw(oldImage,threshold,1,originalImagePath,maskedImagePath);
@@ -115,7 +119,7 @@ public class CircleCalculation {
 
         Mat edges = new Mat();
         Imgproc.Canny(dilate,edges,50,150);
-        Imgcodecs.imwrite("D:\\opencvImage\\canny.jpg", edges);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"\\opencvImage\\canny.jpg", edges);
 
 
         //index=2,差不多每个区域都分内轮廓和外轮廓。
@@ -153,7 +157,7 @@ public class CircleCalculation {
         Mat lines = new Mat();
         Imgproc.HoughLinesP(edges,lines,1, Math.PI/180,50,20,20);
 
-        Imgcodecs.imwrite("D:\\opencvImage\\line.jpg", lines);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"\\opencvImage\\line.jpg", lines);
 
     }
 
@@ -243,7 +247,7 @@ public class CircleCalculation {
         }
         Imgproc.line(contoursImg,intersection,intersection0,new Scalar(0,0,255,1));
         Imgproc.line(contoursImg,normal0,normal1,new Scalar(0,0,255));
-        Imgcodecs.imwrite("D:\\opencvImage\\BlackAndWhite.jpg", contoursImg);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"\\opencvImage\\BlackAndWhite.jpg", contoursImg);
 
         Imgproc.line(image,intersection,intersection0,new Scalar(0,255,0),2);
         Imgproc.line(image,normal0,normal1,new Scalar(0,255,0),2);

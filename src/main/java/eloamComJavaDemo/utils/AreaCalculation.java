@@ -26,13 +26,15 @@ AreaCalculation {
 //        Rect rect =new Rect(220,550,600,600);      //参数须调节
 //        Mat image = new Mat(image1,rect);
 
-        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
-        System.load(url.getPath());
+//        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+        URL url = ClassLoader.getSystemResource(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
+        System.load(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
         if (image.empty()){
             throw new Exception("image is empty!");
         }
         Mat oldImage = image;
-        Imgcodecs.imwrite("./opencvImage/oldzmj.jpg", oldImage);
+//        Imgcodecs.imwrite("./opencvImage/oldzmj.jpg", oldImage);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"opencvImage/oldzmj.jpg", oldImage);
 
         //图片转灰度
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
@@ -69,22 +71,22 @@ AreaCalculation {
 
         if(model.equals("OTSU")){
             Imgproc.threshold(image,image,0,255,Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
-            Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+            Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
         }
         else if (model.equals("normal")){
             Imgproc.threshold(image,image,thresh,255,Imgproc.THRESH_BINARY);
-            Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+            Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
         }
         else if(model.equals("adaptive")){
             Imgproc.adaptiveThreshold(image,image,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,21,5);
-            Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+            Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
         }
         else throw new Exception("没有这种算法");
         //全局二值化操作,固定阈值
         Imgproc.threshold(image,image,0,255,Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
 //        double thresh = Imgproc.threshold(image,image,120,255,Imgproc.THRESH_BINARY);
 //        //System.out.println(thresh);
-        Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
         //局部二值化操作，自适应阈值
 //        Imgproc.adaptiveThreshold(image,image,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,21,5);
 //        Imgcodecs.imwrite("D:/opencvImage/binarization.jpg", image);
@@ -124,7 +126,7 @@ AreaCalculation {
             zmjArea = areas[0];
             relZmjArea = 0;
         }
-        Imgcodecs.imwrite("./opencvImage/final.jpg", contoursImg);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/final.jpg", contoursImg);
         return relZmjArea;
     }
 
@@ -180,7 +182,7 @@ AreaCalculation {
         //Imgcodecs.imwrite("D:/opencvImage/dilate.jpg", result);
         //全局二值化操作,固定阈值
         double thresh = Imgproc.threshold(result,result,0,255,Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);    //参数须调节
-        Imgcodecs.imwrite("./opencvImage/binarization.jpg", result);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", result);
 
         //轮廓发现，得到contours和hierarchy
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -208,7 +210,7 @@ AreaCalculation {
         else{
             area = 0;
         }
-        Imgcodecs.imwrite("./opencvImage/final.jpg", contoursImg);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/final.jpg", contoursImg);
         return area;
     }
     private static void Mat2BufferedImageSave(Mat result) throws IOException {
@@ -217,7 +219,7 @@ AreaCalculation {
         byte[] byteArray=matOfByte.toArray();
         InputStream in=new ByteArrayInputStream(byteArray);
         BufferedImage bufImage= ImageIO.read(in);
-        File output=new File("./opencvImage/kmeans.jpg");
+        File output=new File(System.getProperty("exe.path")+"/opencvImage/kmeans.jpg");
         ImageIO.write(bufImage, "jpg", output);
     }
 
@@ -228,33 +230,34 @@ AreaCalculation {
 //        Rect rect =new Rect(220,550,600,600);      //参数须调节
 //        Mat image = new Mat(image1,rect);
 
-        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
-        System.load(url.getPath());
+//        URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+        URL url = ClassLoader.getSystemResource(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
+        System.load(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
         if (image.empty()){
             throw new Exception("image is empty!");
         }
         Mat oldImage = image;
-        Imgcodecs.imwrite("./opencvImage/oldzmj.jpg", oldImage);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/oldzmj.jpg", oldImage);
 
         //图片转灰度
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
-        Imgcodecs.imwrite("./opencvImage/grayscale.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/grayscale.jpg", image);
 
         //高斯模糊
         Imgproc.GaussianBlur(image, image, new Size(15, 15), 0);
-        Imgcodecs.imwrite("./opencvImage/gaussianBlur.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/gaussianBlur.jpg", image);
 
         //中值滤波
         Imgproc.medianBlur(image,image,5);
-        Imgcodecs.imwrite("./opencvImage/medianBlur.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/medianBlur.jpg", image);
 
         //去除光斑。腐蚀,使高亮区域被周围腐蚀
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3,3));
         Imgproc.erode(image,image,kernel,new Point(-1,-1),21);
-        Imgcodecs.imwrite("./opencvImage/erode.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/erode.jpg", image);
         //膨胀，理解为腐蚀后膨胀回来
         Imgproc.dilate(image,image,kernel,new Point(-1,-1),21);
-        Imgcodecs.imwrite("./opencvImage/dilate.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/dilate.jpg", image);
 
 //        //去除阴影，先闭运算
 //        Mat closeImage = new Mat();
@@ -269,7 +272,7 @@ AreaCalculation {
 //        Imgproc.resize(calcImage,image,new Size(1,1),0,0,Imgproc.INTER_AREA);
 //        Imgcodecs.imwrite("D:/opencvImage/resize.jpg", image);
         Imgproc.threshold(image,image,thresh,255,Imgproc.THRESH_BINARY);
-        Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
 //        if(model.equals("OTSU")){
 //            Imgproc.threshold(image,image,0,255,Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
 //            Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
@@ -286,7 +289,7 @@ AreaCalculation {
         Imgproc.threshold(image,image,0,255,Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
 //        double thresh = Imgproc.threshold(image,image,120,255,Imgproc.THRESH_BINARY);
 //        //System.out.println(thresh);
-        Imgcodecs.imwrite("./opencvImage/binarization.jpg", image);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/binarization.jpg", image);
         //局部二值化操作，自适应阈值
 //        Imgproc.adaptiveThreshold(image,image,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,21,5);
 //        Imgcodecs.imwrite("D:/opencvImage/binarization.jpg", image);
@@ -300,7 +303,7 @@ AreaCalculation {
         Mat hierarchy = new Mat();
         Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_TREE,
                 Imgproc.CHAIN_APPROX_NONE, new Point(-1, -1));
-        Imgcodecs.imwrite("./opencvImage/line.jpg", hierarchy);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/line.jpg", hierarchy);
 
         //相当于创建和原图尺寸相同一张黑色的图，用于后面画线作图
         Mat contoursImg = Mat.zeros(oldImage.size(),CvType.CV_8UC3);
@@ -326,7 +329,7 @@ AreaCalculation {
             zmjArea = areas[0];
             relZmjArea = 0;
         }
-        Imgcodecs.imwrite("./opencvImage/final.jpg", contoursImg);
+        Imgcodecs.imwrite(System.getProperty("exe.path")+"/opencvImage/final.jpg", contoursImg);
         return relZmjArea;
     }
 }

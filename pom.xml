@@ -21,12 +21,12 @@
             <version>4.0.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org</groupId>
-            <artifactId>opencv</artifactId>
-            <scope>system</scope>
-            <systemPath>${project.basedir}\src\main\resources\lib\opencv\opencv-455.jar</systemPath>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org</groupId>-->
+<!--            <artifactId>opencv</artifactId>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}\src\main\resources\lib\opencv\opencv-455.jar</systemPath>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -56,6 +56,26 @@
 
     <!--在build中配置resource，来防止我们资源导出失败的问题-->
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>
+        </plugins>
+
         <resources>
 
             <resource>
