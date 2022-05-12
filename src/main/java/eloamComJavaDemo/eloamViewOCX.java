@@ -372,6 +372,22 @@ public class eloamViewOCX {
 
 	}
 
+	//获取唯一编码
+//	public long GetEncryptedNumber() {
+//		int mid[] = _auto.getIDsOfNames(new String[] { "GetEncryptedNumber" });
+//		int id = mid[0];
+//		System.out.println("id:"+id);
+//
+//		if (id < 0)
+//			return -1;
+//		Variant[] rgvarg = new Variant[0];
+//		Variant ret = _auto.invoke(id, rgvarg);
+//		System.out.println("ret:"+ret);
+//
+//		return ret.getLong();
+//	}
+
+
 	public String GetBarcodeCount(long iDev, long iResolutoin) {
 		int mid[] = _auto.getIDsOfNames(new String[] { "GetBarcodeCount" });
 		int id = mid[0];

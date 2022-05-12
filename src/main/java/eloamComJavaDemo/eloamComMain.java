@@ -429,7 +429,7 @@ public class eloamComMain {
 									DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 									String photoName = dfs.format(dt);
 
-									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ photoName + ".jpg";
+									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
 									String fileName3 = nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -639,7 +639,7 @@ public class eloamComMain {
 								DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 								String photoName = dfs.format(dt);
 
-								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ photoName + ".jpg";
+								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
 								String fileName3 = nowTime + ".jpg";
 								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
