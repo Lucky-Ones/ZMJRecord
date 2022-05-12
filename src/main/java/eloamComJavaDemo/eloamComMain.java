@@ -40,7 +40,7 @@ public class eloamComMain {
 	private eloamViewOCX ocx1;// 预览窗口
 	private eloamThumbnailOCX ocx2;// 缩略图窗口
 
-//	private Dispatch EloamGlobal;
+	//	private Dispatch EloamGlobal;
 	private int Device;// 当前播放视频设备
 	private String[] devs = {"0-主摄像头", "1-副摄像头"};// 设备列表
 
@@ -48,7 +48,6 @@ public class eloamComMain {
 
 	//输入框 实验地点，样品编号
 	Label PlaceLabel;
-	Label textTest;
 	Text PlaceText;
 
 	Label SampleLabel;
@@ -101,16 +100,12 @@ public class eloamComMain {
 	public String getArea(String sPicName) throws Exception{
 //		String sPicName = "C:\\Users\\83811\\Desktop\\5.jpg";
 		System.out.println(sPicName);
-//		URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
-		URL url = ClassLoader.getSystemResource(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
-//		textTest = new Label(group, SWT.NONE);
-//		textTest.setText(url.getPath());
-
-		System.load(System.getProperty("exe.path")+"/lib/opencv/opencv_java455.dll");
+		URL url = ClassLoader.getSystemResource("lib/opencv/opencv_java455.dll");
+		System.load(url.getPath());
 		AreaCalculation areaCalculation = new AreaCalculation();//计算面积
 		Mat image = imread(sPicName, 1);
 		double area = areaCalculation.getArea(image,"OTSU",150);//面积
-        DecimalFormat df = new DecimalFormat("0");
+		DecimalFormat df = new DecimalFormat("0");
 		String arean = String.valueOf(df.format(area));
 		System.out.println("芝麻酱面积"+arean);
 		return arean;
@@ -137,7 +132,7 @@ public class eloamComMain {
 
 	protected void createContents() {
 		shell = new Shell();
-		shell.setText("eloamCom");
+		shell.setText("eloamComJavaDemo");
 		shell.setSize(800, 750);
 		shell.addShellListener(new ShellAdapter() {
 
@@ -184,11 +179,11 @@ public class eloamComMain {
 		deviceCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
-                boolean ret = ocx1.CloseVideo(Device);
-                System.out.println("ocx1.CloseVideo() ret:" + ret);
-                if(ret) {
-                	System.out.println("ocx1.CloseVideo() success.");
-                }
+				boolean ret = ocx1.CloseVideo(Device);
+				System.out.println("ocx1.CloseVideo() ret:" + ret);
+				if(ret) {
+					System.out.println("ocx1.CloseVideo() success.");
+				}
 
 				long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
 
@@ -203,17 +198,17 @@ public class eloamComMain {
 				}
 				resolutionCombo.select(0);
 
-                Device = deviceCombo.getSelectionIndex();
-                int mode = modeCombo.getSelectionIndex();
-                int resolution = resolutionCombo.getSelectionIndex();
-                System.out.println("OpenVideoEx() device:" + Device);
-                System.out.println("OpenVideoEx() mode:" + mode);
-                System.out.println("OpenVideoEx() resolution:" + resolution);
-                ret = ocx1.OpenVideoEx(Device, mode, resolution);
-                System.out.println("ocx1.OpenVideoEx() ret:" + ret);
-                if(ret) {
-                	System.out.println("ocx1.OpenVideo() success.");
-                }
+				Device = deviceCombo.getSelectionIndex();
+				int mode = modeCombo.getSelectionIndex();
+				int resolution = resolutionCombo.getSelectionIndex();
+				System.out.println("OpenVideoEx() device:" + Device);
+				System.out.println("OpenVideoEx() mode:" + mode);
+				System.out.println("OpenVideoEx() resolution:" + resolution);
+				ret = ocx1.OpenVideoEx(Device, mode, resolution);
+				System.out.println("ocx1.OpenVideoEx() ret:" + ret);
+				if(ret) {
+					System.out.println("ocx1.OpenVideo() success.");
+				}
 			}
 		});
 
@@ -225,12 +220,13 @@ public class eloamComMain {
 			public void widgetSelected(SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
 				int mode = modeCombo.getSelectionIndex();
+				mode = 1;//写死1， 即"1-MJPG模式"
 				System.out.println("SetMode() mode:" + mode);
-                boolean ret = ocx1.SetMode(Device, mode);
-                System.out.println("ocx1.SetMode() ret:" + ret);
-                if(ret) {
-                	System.out.println("ocx1.SetMode() success.");
-                }
+				boolean ret = ocx1.SetMode(Device, mode);
+				System.out.println("ocx1.SetMode() ret:" + ret);
+				if(ret) {
+					System.out.println("ocx1.SetMode() success.");
+				}
 			}
 		});
 
@@ -243,11 +239,11 @@ public class eloamComMain {
 				Device = deviceCombo.getSelectionIndex();
 				int resolution = resolutionCombo.getSelectionIndex();
 				System.out.println("SetResolution() resolution:" + resolution);
-                boolean ret = ocx1.SetResolution(Device, resolution);
-                System.out.println("ocx1.SetResolution() ret:" + ret);
-                if(ret) {
-                	System.out.println("ocx1.SetResolution() success.");
-                }
+				boolean ret = ocx1.SetResolution(Device, resolution);
+				System.out.println("ocx1.SetResolution() ret:" + ret);
+				if(ret) {
+					System.out.println("ocx1.SetResolution() success.");
+				}
 			}
 		});
 
@@ -334,34 +330,33 @@ public class eloamComMain {
 			}
 		});
 
-//		StartRecordBtn = new Button(group, SWT.NONE);
-//		StartRecordBtn.setText("开始录像");
-//		StartRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-//				Device = deviceCombo.getSelectionIndex();
-//				long A  = 60;
-////				boolean ret = ocx1.StartRecord("E:\\zmj\\record\\1.mp4",A);
-//				boolean ret = ocx1.StartRecord(System.getProperty("exe.path")+"\\zmj\\record\\1.mp4",A);
+		StartRecordBtn = new Button(group, SWT.NONE);
+		StartRecordBtn.setText("开始录像");
+		StartRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				Device = deviceCombo.getSelectionIndex();
+				long A  = 60;
+				boolean ret = ocx1.StartRecord("E:\\zmj\\record\\1.mp4",A);
+				if(ret) {
+					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+				}else{
+					System.out.println("ocx1.StartRecord(Device) ret:null" );
+				}
+			}
+		});
+
+		StopRecordBtn = new Button(group, SWT.NONE);
+		StopRecordBtn.setText("停止录像");
+		StopRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				Device = deviceCombo.getSelectionIndex();
+				//没返回值
+				ocx1.StopRecord();
 //				if(ret) {
 //					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
-//				}else{
-//					System.out.println("ocx1.StartRecord(Device) ret:null" );
 //				}
-//			}
-//		});
-//
-//		StopRecordBtn = new Button(group, SWT.NONE);
-//		StopRecordBtn.setText("停止录像");
-//		StopRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-//				Device = deviceCombo.getSelectionIndex();
-//				//没返回值
-//				ocx1.StopRecord();
-////				if(ret) {
-////					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
-////				}
-//			}
-//		});
+			}
+		});
 
 		//拍照录像空格监听代码
 		Display.getDefault().addFilter(SWT.KeyDown, new Listener() {
@@ -395,8 +390,7 @@ public class eloamComMain {
 								String nowTime1 = "";
 								nowTime1 = df1.format(dt1);//start_time
 								String video_name = nowTime1 + ".mp4";//video_name
-//								String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
-								String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
+								String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
 								long A  = 60;
 								boolean ret = ocx1.StartRecord(fileName1,A);
 								if(ret) {
@@ -422,8 +416,7 @@ public class eloamComMain {
 									String nowTime = "";
 									nowTime = df.format(dt);
 
-//									String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
-									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" + nowTime + ".jpg";
+									String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
 									String fileName3 = nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -465,8 +458,7 @@ public class eloamComMain {
 										String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
 										session5.close();
 										CircleCalculation circle = new CircleCalculation();
-//										String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
-										String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+picture_id+".jpg";
+										String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
 										ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
 										String R1 = String.valueOf(imageInfo.getR1());
 										String R2 = String.valueOf(imageInfo.getR2());
@@ -506,7 +498,139 @@ public class eloamComMain {
 
 		//拍照录像按钮代码
 
+		RecordAndPhotoBtn = new Button(group, SWT.NONE);
+		RecordAndPhotoBtn.setText("拍照and录像");
+		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e)  {
+				Device = deviceCombo.getSelectionIndex();
 
+
+				String sampleText = SampleText.getText();//样品编号
+				String placeText = PlaceText.getText();//实验地点
+
+
+				if (sampleText.isEmpty() || placeText.isEmpty()) {
+					MessageBox mb = new MessageBox(shell,SWT.NONE);
+					mb.setText("提示");
+					mb.setMessage("实验地点或样品编号未填写");
+					mb.open();
+				}
+				else{
+					System.out.println("实验地点:"+placeText);
+					System.out.println("样品编号:"+sampleText);
+
+
+					Thread tRecordAndPhoto;
+
+					tRecordAndPhoto = new Thread(() ->{
+						try {
+							Date dt1 = new Date();
+							DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+							String nowTime1 = "";
+							nowTime1 = df1.format(dt1);//start_time
+							String video_name = nowTime1 + ".mp4";//video_name
+							String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
+							long A  = 60;
+							boolean ret = ocx1.StartRecord(fileName1,A);
+							if(ret) {
+								System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+							}else{
+								System.out.println("ocx1.StartRecord(Device) ret:null" );
+							}
+
+							//增加一条实验数据，拿到返回的实验id
+							SqlSession session1 = MybatisUtils.getSession();
+							ExperimentMapper mapper1 = session1.getMapper(ExperimentMapper.class);
+
+							Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1,placeText,sampleText);
+							mapper1.addExperiment(experiment);
+							int experiment_id = experiment.getExperiment_id();//本次实验id:  experiment_id
+							session1.commit();
+							session1.close();
+
+
+							for (int i=0;i<100000;i++){//这里设置拍10张照片，数据库连接好后改为死循环
+								Date dt = new Date();
+								DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+								String nowTime = "";
+								nowTime = df.format(dt);
+
+								String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
+								String fileName3 = nowTime + ".jpg";
+								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
+								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+								if(ret2) {
+									ocx2.Add(fileName2);
+								}
+								String area = getArea(fileName2);//这次面积数值
+								//存储数据库：
+								//sampleText 样品编号变量
+								//placeText 实验地点变量
+								//area  这次面积变量
+
+								//插入图片，拿到本次图片id
+								SqlSession session2 = MybatisUtils.getSession();
+								PictureMapper mapper2 = session2.getMapper(PictureMapper.class);
+								Picture picture = new Picture(fileName3,nowTime,fileName2,area,experiment_id);
+								mapper2.addPicture(picture);
+								int picture_id = picture.getPicture_id();//本次图片id=picture_id，上次图片id=picture_id-1
+								session2.commit(); //提交事务
+								session2.close();
+
+
+								//读取上一次面积：
+								SqlSession session3 = MybatisUtils.getSession();
+								PictureMapper mapper = session3.getMapper(PictureMapper.class);
+								String agoArea= mapper.getSampleAreaById(picture_id-1);//上次图片的样品面积agoArea
+								session3.close();
+
+								//判断面积是一致：
+								if (area.equals(agoArea)){
+
+//									String R1="R1";
+//									="R2";
+//									String RM="RM";
+									//String picture_id_2="picture_id_2";//图片二地址
+
+									//根据图片id查找图片地址
+									SqlSession session5 = MybatisUtils.getSession();
+									PictureMapper mapper4 = session5.getMapper(PictureMapper.class);
+									String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
+									session5.close();
+									CircleCalculation circle = new CircleCalculation();
+									String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
+									ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
+									String R1 = String.valueOf(imageInfo.getR1());
+									String R2 = String.valueOf(imageInfo.getR2());
+									String RM = String.valueOf(imageInfo.getRm());
+
+									//面积一致则本次实验结束，更新实验数据
+									SqlSession session4 = MybatisUtils.getSession();
+									ExperimentMapper mapper3 = session4.getMapper(ExperimentMapper.class);
+									Experiment experiment2 = new Experiment(experiment_id,nowTime,area,R1,R2,RM,picture_id,picture_id_2);
+									mapper3.updateExperiment(experiment2);
+									session4.commit();
+									session4.close();
+
+
+									break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
+								}else{
+									Thread.sleep(2500);//等待2.5秒后继续拍照
+								}
+							}
+//							ocx1.StopRecord();
+						} catch (Exception exception) {
+							exception.printStackTrace();
+						}finally {
+							ocx1.StopRecord();
+						}
+
+					});
+					tRecordAndPhoto.start();
+				}
+				//没返回值
+			}
+		});
 
 
 		CheckDeskewBtn = new Button(group, SWT.CHECK);
@@ -561,166 +685,28 @@ public class eloamComMain {
 			}
 		});
 
-		RecordAndPhotoBtn = new Button(group, SWT.NONE);
-		RecordAndPhotoBtn.setText("开始");
-		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e)  {
+		takingPicturesBtn = new Button(group, SWT.NONE);
+		takingPicturesBtn.setText("拍  照");
+		takingPicturesBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
 
+				Date dt = new Date();
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+				String nowTime = "";
+				nowTime = df.format(dt);
 
-				String sampleText = SampleText.getText();//样品编号
-				String placeText = PlaceText.getText();//实验地点
+				String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
 
-
-				if (sampleText.isEmpty() || placeText.isEmpty()) {
-					MessageBox mb = new MessageBox(shell,SWT.NONE);
-					mb.setText("提示");
-					mb.setMessage("实验地点或样品编号未填写");
-					mb.open();
+				boolean ret = ocx1.Scan(Device, fileName, 0);
+				if(ret) {
+					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
+					ocx2.Add(fileName);
+				}else{
+					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
 				}
-				else{
-					System.out.println("实验地点:"+placeText);
-					System.out.println("样品编号:"+sampleText);
-
-
-					Thread tRecordAndPhoto;
-
-					tRecordAndPhoto = new Thread(() ->{
-						try {
-							Date dt1 = new Date();
-							DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-							String nowTime1 = "";
-							nowTime1 = df1.format(dt1);//start_time
-							String video_name = nowTime1 + ".mp4";//video_name
-//							String fileName1 = "E:\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
-							String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
-							long A  = 60;
-							boolean ret = ocx1.StartRecord(fileName1,A);
-							if(ret) {
-								System.out.println("ocx1.StartRecord(Device) ret:" + ret);
-							}else{
-								System.out.println("ocx1.StartRecord(Device) ret:null" );
-							}
-
-							//增加一条实验数据，拿到返回的实验id
-							SqlSession session1 = MybatisUtils.getSession();
-							ExperimentMapper mapper1 = session1.getMapper(ExperimentMapper.class);
-
-							Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1,placeText,sampleText);
-							mapper1.addExperiment(experiment);
-							int experiment_id = experiment.getExperiment_id();//本次实验id:  experiment_id
-							session1.commit();
-							session1.close();
-
-
-							for (int i=0;i<100000;i++){//这里设置拍10张照片，数据库连接好后改为死循环
-								Date dt = new Date();
-								DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-								String nowTime = "";
-								nowTime = df.format(dt);
-
-//								String fileName2 = "E:\\zmj\\photo\\" + nowTime + ".jpg";
-								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" + nowTime + ".jpg";
-								String fileName3 = nowTime + ".jpg";
-								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
-								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
-								if(ret2) {
-									ocx2.Add(fileName2);
-								}
-								String area = getArea(fileName2);//这次面积数值
-								//存储数据库：
-								//sampleText 样品编号变量
-								//placeText 实验地点变量
-								//area  这次面积变量
-
-								//插入图片，拿到本次图片id
-								SqlSession session2 = MybatisUtils.getSession();
-								PictureMapper mapper2 = session2.getMapper(PictureMapper.class);
-								Picture picture = new Picture(fileName3,nowTime,fileName2,area,experiment_id);
-								mapper2.addPicture(picture);
-								int picture_id = picture.getPicture_id();//本次图片id=picture_id，上次图片id=picture_id-1
-								session2.commit(); //提交事务
-								session2.close();
-
-
-								//读取上一次面积：
-								SqlSession session3 = MybatisUtils.getSession();
-								PictureMapper mapper = session3.getMapper(PictureMapper.class);
-								String agoArea= mapper.getSampleAreaById(picture_id-1);//上次图片的样品面积agoArea
-								session3.close();
-
-								//判断面积是一致：
-								if (area.equals(agoArea)){
-
-//									String R1="R1";
-//									="R2";
-//									String RM="RM";
-									//String picture_id_2="picture_id_2";//图片二地址
-
-									//根据图片id查找图片地址
-									SqlSession session5 = MybatisUtils.getSession();
-									PictureMapper mapper4 = session5.getMapper(PictureMapper.class);
-									String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
-									session5.close();
-									CircleCalculation circle = new CircleCalculation();
-//									String picture_id_2 = "E:\\zmj\\out\\"+picture_id+".jpg";
-									String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+picture_id+".jpg";
-									ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
-									String R1 = String.valueOf(imageInfo.getR1());
-									String R2 = String.valueOf(imageInfo.getR2());
-									String RM = String.valueOf(imageInfo.getRm());
-
-									//面积一致则本次实验结束，更新实验数据
-									SqlSession session4 = MybatisUtils.getSession();
-									ExperimentMapper mapper3 = session4.getMapper(ExperimentMapper.class);
-									Experiment experiment2 = new Experiment(experiment_id,nowTime,area,R1,R2,RM,picture_id,picture_id_2);
-									mapper3.updateExperiment(experiment2);
-									session4.commit();
-									session4.close();
-
-
-									break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
-								}else{
-									Thread.sleep(2500);//等待2.5秒后继续拍照
-								}
-							}
-//							ocx1.StopRecord();
-						} catch (Exception exception) {
-							exception.printStackTrace();
-						}finally {
-							ocx1.StopRecord();
-						}
-
-					});
-					tRecordAndPhoto.start();
-				}
-				//没返回值
 			}
 		});
-
-//		takingPicturesBtn = new Button(group, SWT.NONE);
-//		takingPicturesBtn.setText("拍  照");
-//		takingPicturesBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-//				Device = deviceCombo.getSelectionIndex();
-//
-//				Date dt = new Date();
-//				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-//				String nowTime = "";
-//				nowTime = df.format(dt);
-//
-////				String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
-//				String fileName = System.getProperty("exe.path")+"\\zmj\\photo\\" + nowTime + ".jpg";
-//
-//				boolean ret = ocx1.Scan(Device, fileName, 0);
-//				if(ret) {
-//					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
-//					ocx2.Add(fileName);
-//				}else{
-//					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
-//				}
-//			}
-//		});
 
 //		IDcardBtn = new Button(group, SWT.NONE);
 //		IDcardBtn.setText("获取身份证信息");
@@ -770,17 +756,18 @@ public class eloamComMain {
 			// 获取分辨率
 			deviceCombo.removeAll();
 			deviceCombo.add(devs[0], 0);
-			deviceCombo.add(devs[1], 1);
+//			deviceCombo.add(devs[1], 1);
 
 			deviceCombo.select(0);
 			Device = deviceCombo.getSelectionIndex();
 
 			modeCombo.removeAll();
-			modeCombo.add("0-YUY2模式");
+//			modeCombo.add("0-YUY2模式");
 			modeCombo.add("1-MJPG模式");
-			modeCombo.select(1);
+			modeCombo.select(0);
 
-			long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
+//			long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
+			long result = ocx1.GetResolutionNumberEx(Device, 1);//写死1 即"1-MJPG模式"
 
 			int count = 0;
 			count = (int)result;
