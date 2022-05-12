@@ -204,6 +204,7 @@ public class eloamComMain {
 				int mode = modeCombo.getSelectionIndex();
 				int resolution = resolutionCombo.getSelectionIndex();
 				resolution = 11;//只选择11 即1024*768
+				mode=1;
 				System.out.println("OpenVideoEx() device:" + Device);
 				System.out.println("OpenVideoEx() mode:" + mode);
 				System.out.println("OpenVideoEx() resolution:" + resolution);
@@ -241,6 +242,7 @@ public class eloamComMain {
 			public void widgetSelected(SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
 				int resolution = resolutionCombo.getSelectionIndex();
+				resolution = 11;//写死分辨率
 				System.out.println("SetResolution() resolution:" + resolution);
 				boolean ret = ocx1.SetResolution(Device, resolution);
 				System.out.println("ocx1.SetResolution() ret:" + ret);
@@ -374,8 +376,11 @@ public class eloamComMain {
 //					box.open();
 					Device = deviceCombo.getSelectionIndex();
 
+
 					String sampleText = SampleText.getText();//样品编号
 					String placeText = PlaceText.getText();//实验地点
+
+
 					if (sampleText.isEmpty() || placeText.isEmpty()) {
 						MessageBox mb = new MessageBox(shell,SWT.NONE);
 						mb.setText("提示");
@@ -385,15 +390,18 @@ public class eloamComMain {
 					else{
 						System.out.println("实验地点:"+placeText);
 						System.out.println("样品编号:"+sampleText);
+
+
 						Thread tRecordAndPhoto;
+
 						tRecordAndPhoto = new Thread(() ->{
 							try {
 								Date dt1 = new Date();
-								DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+								DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 								String nowTime1 = "";
 								nowTime1 = df1.format(dt1);//start_time
 								String video_name = nowTime1 + ".mp4";//video_name
-								String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" + nowTime1 + ".mp4";//video_site
+								String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
 								long A  = 60;
 								boolean ret = ocx1.StartRecord(fileName1,A);
 								if(ret) {
@@ -413,13 +421,15 @@ public class eloamComMain {
 								session1.close();
 
 
-								for (int i=0;i<100000;i++){//这里设置拍10张照片，数据库连接好后改为死循环
+								for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 									Date dt = new Date();
 									DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 									String nowTime = "";
 									nowTime = df.format(dt);
+									DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+									String photoName = dfs.format(dt);
 
-									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" + nowTime + ".jpg";
+									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ photoName + ".jpg";
 									String fileName3 = nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -441,6 +451,7 @@ public class eloamComMain {
 									session2.commit(); //提交事务
 									session2.close();
 
+
 									//读取上一次面积：
 									SqlSession session3 = MybatisUtils.getSession();
 									PictureMapper mapper = session3.getMapper(PictureMapper.class);
@@ -458,10 +469,10 @@ public class eloamComMain {
 										//根据图片id查找图片地址
 										SqlSession session5 = MybatisUtils.getSession();
 										PictureMapper mapper4 = session5.getMapper(PictureMapper.class);
-										String picture_site= mapper4.getSiteById(picture_id);//上次图片的样品面积agoArea
+										String picture_site= mapper4.getSiteById(picture_id);
 										session5.close();
 										CircleCalculation circle = new CircleCalculation();
-										String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+picture_id+".jpg";
+										String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+"mp"+photoName+".jpg";
 										ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
 										String R1 = String.valueOf(imageInfo.getR1());
 										String R2 = String.valueOf(imageInfo.getR2());
@@ -474,6 +485,13 @@ public class eloamComMain {
 										mapper3.updateExperiment(experiment2);
 										session4.commit();
 										session4.close();
+
+
+										MessageBox mb = new MessageBox(shell,SWT.NONE);
+										mb.setText("提示");
+										mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
+										mb.open();
+
 
 
 										break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
@@ -679,6 +697,13 @@ public class eloamComMain {
 									session4.close();
 
 
+									MessageBox mb = new MessageBox(shell,SWT.NONE);
+									mb.setText("提示");
+									mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
+									mb.open();
+
+
+
 									break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
 								}else{
 									Thread.sleep(2500);//等待2.5秒后继续拍照
@@ -694,7 +719,6 @@ public class eloamComMain {
 					});
 					tRecordAndPhoto.start();
 				}
-				//没返回值
 			}
 		});
 
@@ -777,7 +801,7 @@ public class eloamComMain {
 		boolean ret = ocx1.InitDev();
 		System.out.println("ocx1.InitDev() ret:" + ret);
 		if (ret) {
-			ret = ocx1.OpenVideoEx(0, 1, 0);
+			ret = ocx1.OpenVideoEx(0, 1, 11);
 			System.out.println("ocx1.OpenVideo() ret:" + ret);
 			int rst = ocx1.GetState(0);
 			System.out.println("ocx1.GetState() rst:" + rst);
