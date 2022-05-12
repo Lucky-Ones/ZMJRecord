@@ -201,6 +201,7 @@ public class eloamComMain {
 				Device = deviceCombo.getSelectionIndex();
 				int mode = modeCombo.getSelectionIndex();
 				int resolution = resolutionCombo.getSelectionIndex();
+				resolution = 11;//只选择11 即1024*768
 				System.out.println("OpenVideoEx() device:" + Device);
 				System.out.println("OpenVideoEx() mode:" + mode);
 				System.out.println("OpenVideoEx() resolution:" + resolution);
@@ -774,12 +775,16 @@ public class eloamComMain {
 
 			resolutionCombo.removeAll();
 			String res;
-			for (int i = 0; i < count; i++) {
-				res = ocx1.GetResolution(Device, i);
-				resolutionCombo.add(res);
-				resolutionCombo.select(0);
-			}
+			res = ocx1.GetResolution(Device, 11);
+			resolutionCombo.add(res);//只添加11 即1024*768
+			resolutionCombo.select(0);
+//			for (int i = 0; i < count; i++) {
+//				res = ocx1.GetResolution(Device, i);
+//				resolutionCombo.add(res);
+//				resolutionCombo.select(0);
+//			}
 		}
+
 
 		ret = ocx1.InitIdCard();
 		System.out.println("ocx1.InitIdCard() ret:" + ret);
