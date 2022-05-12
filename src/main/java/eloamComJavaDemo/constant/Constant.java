@@ -6,9 +6,13 @@ public class Constant {
 //
 //    public static final double CONTAINER_HEIGHT = 297;
 
-    //A3³ß´ç
-    public static final double CONTAINER_WIDTH = 297;
+//    //A3³ß´ç
+//    public static final double CONTAINER_WIDTH = 297;
+//
+//    public static final double CONTAINER_HEIGHT = 420;
 
-    public static final double CONTAINER_HEIGHT = 420;
+    //400*400³ß´ç
+    public static final double CONTAINER_WIDTH = 400;
 
+    public static final double CONTAINER_HEIGHT = 400;
 }

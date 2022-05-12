@@ -307,6 +307,7 @@ public class CircleCalculation {
         // 将处理好的图片数据写入到新图片文件中
         FileOutputStream fos = new FileOutputStream(file);
         ImageIO.write(bufferedImage,"jpg",fos);
+        fos.close();
 
     }
 
