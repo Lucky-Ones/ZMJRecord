@@ -331,33 +331,33 @@ public class eloamComMain {
 			}
 		});
 
-		StartRecordBtn = new Button(group, SWT.NONE);
-		StartRecordBtn.setText("开始录像");
-		StartRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				long A  = 60;
-				boolean ret = ocx1.StartRecord("E:\\zmj\\record\\1.mp4",A);
-				if(ret) {
-					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
-				}else{
-					System.out.println("ocx1.StartRecord(Device) ret:null" );
-				}
-			}
-		});
-
-		StopRecordBtn = new Button(group, SWT.NONE);
-		StopRecordBtn.setText("停止录像");
-		StopRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				//没返回值
-				ocx1.StopRecord();
+//		StartRecordBtn = new Button(group, SWT.NONE);
+//		StartRecordBtn.setText("开始录像");
+//		StartRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				long A  = 60;
+//				boolean ret = ocx1.StartRecord("E:\\zmj\\record\\1.mp4",A);
 //				if(ret) {
 //					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+//				}else{
+//					System.out.println("ocx1.StartRecord(Device) ret:null" );
 //				}
-			}
-		});
+//			}
+//		});
+//
+//		StopRecordBtn = new Button(group, SWT.NONE);
+//		StopRecordBtn.setText("停止录像");
+//		StopRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				//没返回值
+//				ocx1.StopRecord();
+////				if(ret) {
+////					System.out.println("ocx1.StartRecord(Device) ret:" + ret);
+////				}
+//			}
+//		});
 
 		//拍照录像空格监听代码
 		Display.getDefault().addFilter(SWT.KeyDown, new Listener() {
@@ -497,10 +497,77 @@ public class eloamComMain {
 
 
 
+
+//		CheckDeskewBtn = new Button(group, SWT.CHECK);
+//		CheckDeskewBtn.setText("纠偏裁边");
+//		CheckDeskewBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean b = CheckDeskewBtn.getSelection();
+//				ocx1.Deskew(Device, b);
+//			}
+//		});
+//
+//		checkRectBtn = new Button(group, SWT.CHECK);
+//		checkRectBtn.setText("手动框选");
+//		checkRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				System.out.println("ocx1.GetResolutionWidth(Device, resolution) Device:" + Device);
+//				boolean b = checkRectBtn.getSelection();
+//				System.out.println("CheckDeskewBtn.getSelection() b:" + b);
+//				ocx1.SetState(Device, b);
+//			}
+//		});
+
+
+		Device = deviceCombo.getSelectionIndex();
+//		System.out.println("ocx1.GetResolutionWidth(Device, resolution) Device:" + Device);
+//		int resolution = resolutionCombo.getSelectionIndex();
+//		int width = Integer.valueOf(ocx1.GetResolutionWidth(Device, resolution)).intValue();
+//		System.out.println("ocx1.GetResolutionWidth(Device, resolution) width:" + width);
+//		int height = Integer.valueOf(ocx1.GetResolutionHeight(Device, resolution)).intValue();
+//		System.out.println("ocx1.GetResolutionHeight(Device, resolution) height:" + height);
+		boolean ret = ocx1.SetPreviewWindow(Device, 10, 10, 4000, 3000);
+		if(!ret) {
+			System.out.println("ocx1.SetPreviewWindow(Device, 30, 20, width - 20, height - 20) ret:" + ret);
+		}
+
+//		displayRectBtn = new Button(group, SWT.NONE);
+//		displayRectBtn.setText("指定选框");
+//		displayRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				System.out.println("ocx1.GetResolutionWidth(Device, resolution) Device:" + Device);
+//				int resolution = resolutionCombo.getSelectionIndex();
+//				int width = Integer.valueOf(ocx1.GetResolutionWidth(Device, resolution)).intValue();
+//				System.out.println("ocx1.GetResolutionWidth(Device, resolution) width:" + width);
+//				int height = Integer.valueOf(ocx1.GetResolutionHeight(Device, resolution)).intValue();
+//				System.out.println("ocx1.GetResolutionHeight(Device, resolution) height:" + height);
+//				boolean ret = ocx1.SetPreviewWindow(Device, 10, 10, width - 20, height -20);
+//				if(ret) {
+//					System.out.println("ocx1.SetPreviewWindow(Device, 30, 20, width - 60, height - 40) ret:" + ret);
+//				}
+//			}
+//		});
+
+
+//		unDisplayRectBtn = new Button(group, SWT.NONE);
+//		unDisplayRectBtn.setText("取消选框");
+//		unDisplayRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean ret = ocx1.SetPreviewWindow(Device, 0, 0, 0, 0);
+//				if(ret) {
+//					System.out.println("ocx1.SetPreviewWindow(Device, 0, 0, 0, 0) ret:" + ret);
+//				}
+//			}
+//		});
+
 		//拍照录像按钮代码
 
 		RecordAndPhotoBtn = new Button(group, SWT.NONE);
-		RecordAndPhotoBtn.setText("拍照and录像");
+		RecordAndPhotoBtn.setText("开始");
 		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e)  {
 				Device = deviceCombo.getSelectionIndex();
@@ -634,80 +701,28 @@ public class eloamComMain {
 		});
 
 
-		CheckDeskewBtn = new Button(group, SWT.CHECK);
-		CheckDeskewBtn.setText("纠偏裁边");
-		CheckDeskewBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean b = CheckDeskewBtn.getSelection();
-				ocx1.Deskew(Device, b);
-			}
-		});
-
-		checkRectBtn = new Button(group, SWT.CHECK);
-		checkRectBtn.setText("手动框选");
-		checkRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				System.out.println("ocx1.GetResolutionWidth(Device, resolution) Device:" + Device);
-				boolean b = checkRectBtn.getSelection();
-				System.out.println("CheckDeskewBtn.getSelection() b:" + b);
-				ocx1.SetState(Device, b);
-			}
-		});
-
-		displayRectBtn = new Button(group, SWT.NONE);
-		displayRectBtn.setText("指定选框");
-		displayRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				System.out.println("ocx1.GetResolutionWidth(Device, resolution) Device:" + Device);
-				int resolution = resolutionCombo.getSelectionIndex();
-				int width = Integer.valueOf(ocx1.GetResolutionWidth(Device, resolution)).intValue();
-				System.out.println("ocx1.GetResolutionWidth(Device, resolution) width:" + width);
-				int height = Integer.valueOf(ocx1.GetResolutionHeight(Device, resolution)).intValue();
-				System.out.println("ocx1.GetResolutionHeight(Device, resolution) height:" + height);
-				boolean ret = ocx1.SetPreviewWindow(Device, 10, 10, width - 20, height -20);
-				if(ret) {
-					System.out.println("ocx1.SetPreviewWindow(Device, 30, 20, width - 60, height - 40) ret:" + ret);
-				}
-			}
-		});
-
-		unDisplayRectBtn = new Button(group, SWT.NONE);
-		unDisplayRectBtn.setText("取消选框");
-		unDisplayRectBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean ret = ocx1.SetPreviewWindow(Device, 0, 0, 0, 0);
-				if(ret) {
-					System.out.println("ocx1.SetPreviewWindow(Device, 0, 0, 0, 0) ret:" + ret);
-				}
-			}
-		});
-
-		takingPicturesBtn = new Button(group, SWT.NONE);
-		takingPicturesBtn.setText("拍  照");
-		takingPicturesBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-
-				Date dt = new Date();
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-				String nowTime = "";
-				nowTime = df.format(dt);
-
-				String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
-
-				boolean ret = ocx1.Scan(Device, fileName, 0);
-				if(ret) {
-					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
-					ocx2.Add(fileName);
-				}else{
-					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
-				}
-			}
-		});
+//		takingPicturesBtn = new Button(group, SWT.NONE);
+//		takingPicturesBtn.setText("拍  照");
+//		takingPicturesBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//
+//				Date dt = new Date();
+//				DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+//				String nowTime = "";
+//				nowTime = df.format(dt);
+//
+//				String fileName = "E:\\zmj\\photo\\" + nowTime + ".jpg";
+//
+//				boolean ret = ocx1.Scan(Device, fileName, 0);
+//				if(ret) {
+//					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
+//					ocx2.Add(fileName);
+//				}else{
+//					System.out.println("ocx1.Scan(Device, fileName, 0) ret:" + ret);
+//				}
+//			}
+//		});
 
 //		IDcardBtn = new Button(group, SWT.NONE);
 //		IDcardBtn.setText("获取身份证信息");
