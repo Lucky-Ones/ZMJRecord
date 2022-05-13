@@ -130,6 +130,7 @@ public class eloamComMain {
 
 		shell.open();
 		boolean ret = ocx1.SetPreviewWindow(Device, 100, 100, 800, 600);//固定选框
+		System.out.println(ret);
 
 
 		while (!shell.isDisposed()) {
@@ -180,86 +181,92 @@ public class eloamComMain {
 //		SampleLabel.setBounds(65, 165, 40, 20);
 		PlaceText = new Text(group, SWT.SINGLE);
 
-		devicelListLabel = new Label(group, SWT.NONE);
-		devicelListLabel.setText("设备列表:");
-
-
-
-
-		deviceCombo = new Combo(group, SWT.READ_ONLY);
-		deviceCombo.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				boolean ret = ocx1.CloseVideo(Device);
-				System.out.println("ocx1.CloseVideo() ret:" + ret);
-				if(ret) {
-					System.out.println("ocx1.CloseVideo() success.");
-				}
-
-				long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
-
-				int count = 0;
-				count = (int)result;
-
-				resolutionCombo.removeAll();
-				String res;
-				for (int i = 0; i < count; i++) {
-					res = ocx1.GetResolution(Device, i);
-					resolutionCombo.add(res);
-				}
-				resolutionCombo.select(0);
-
-				Device = deviceCombo.getSelectionIndex();
-				int mode = modeCombo.getSelectionIndex();
-				int resolution = resolutionCombo.getSelectionIndex();
-				resolution = 11;//只选择11 即1024*768
-				mode=1;
-				System.out.println("OpenVideoEx() device:" + Device);
-				System.out.println("OpenVideoEx() mode:" + mode);
-				System.out.println("OpenVideoEx() resolution:" + resolution);
-				ret = ocx1.OpenVideoEx(Device, mode, resolution);
-				System.out.println("ocx1.OpenVideoEx() ret:" + ret);
-				if(ret) {
-					System.out.println("ocx1.OpenVideo() success.");
-				}
-			}
-		});
-
-		modeLabel = new Label(group, SWT.NONE);
-		modeLabel.setText("模式:");
-
-		modeCombo = new Combo(group, SWT.READ_ONLY);
-		modeCombo.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				int mode = modeCombo.getSelectionIndex();
-				mode = 1;//写死1， 即"1-MJPG模式"
-				System.out.println("SetMode() mode:" + mode);
-				boolean ret = ocx1.SetMode(Device, mode);
-				System.out.println("ocx1.SetMode() ret:" + ret);
-				if(ret) {
-					System.out.println("ocx1.SetMode() success.");
-				}
-			}
-		});
-
-		resolutionLabel = new Label(group, SWT.NONE);
-		resolutionLabel.setText("分辨率:");
-
-		resolutionCombo = new Combo(group, SWT.READ_ONLY);
-		resolutionCombo.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
-				int resolution = resolutionCombo.getSelectionIndex();
-				resolution = 11;//写死分辨率
-				System.out.println("SetResolution() resolution:" + resolution);
-				boolean ret = ocx1.SetResolution(Device, resolution);
-				System.out.println("ocx1.SetResolution() ret:" + ret);
-				if(ret) {
-					System.out.println("ocx1.SetResolution() success.");
-				}
-			}
-		});
+//		devicelListLabel = new Label(group, SWT.NONE);
+//		devicelListLabel.setText("设备列表:");
+//
+//
+//
+//
+//		deviceCombo = new Combo(group, SWT.READ_ONLY);
+//		deviceCombo.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				boolean ret = ocx1.CloseVideo(Device);
+//				System.out.println("ocx1.CloseVideo() ret:" + ret);
+//				if(ret) {
+//					System.out.println("ocx1.CloseVideo() success.");
+//				}
+//
+//				long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
+//
+//				int count = 0;
+//				count = (int)result;
+////
+////				resolutionCombo.removeAll();
+////				String res;
+////				for (int i = 0; i < count; i++) {
+////					res = ocx1.GetResolution(Device, i);
+////					resolutionCombo.add(res);
+////				}
+////				resolutionCombo.select(0);
+//
+//				resolutionCombo.removeAll();
+//				String res;
+//				res = ocx1.GetResolution(Device, 4);
+//				resolutionCombo.add(res);//只添加11 即1024*768
+//				resolutionCombo.select(0);
+//
+//				Device = deviceCombo.getSelectionIndex();
+//				int mode = modeCombo.getSelectionIndex();
+//				int resolution = resolutionCombo.getSelectionIndex();
+//				resolution = 11;//只选择11 即1024*768
+//				mode=1;
+//				System.out.println("OpenVideoEx() device:" + Device);
+//				System.out.println("OpenVideoEx() mode:" + mode);
+//				System.out.println("OpenVideoEx() resolution:" + resolution);
+//				ret = ocx1.OpenVideoEx(Device, mode, resolution);
+//				System.out.println("ocx1.OpenVideoEx() ret:" + ret);
+//				if(ret) {
+//					System.out.println("ocx1.OpenVideo() success.");
+//				}
+//			}
+//		});
+//
+//		modeLabel = new Label(group, SWT.NONE);
+//		modeLabel.setText("模式:");
+//
+//		modeCombo = new Combo(group, SWT.READ_ONLY);
+//		modeCombo.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				int mode = modeCombo.getSelectionIndex();
+//				mode = 1;//写死1， 即"1-MJPG模式"
+//				System.out.println("SetMode() mode:" + mode);
+//				boolean ret = ocx1.SetMode(Device, mode);
+//				System.out.println("ocx1.SetMode() ret:" + ret);
+//				if(ret) {
+//					System.out.println("ocx1.SetMode() success.");
+//				}
+//			}
+//		});
+//
+//		resolutionLabel = new Label(group, SWT.NONE);
+//		resolutionLabel.setText("分辨率:");
+//
+//		resolutionCombo = new Combo(group, SWT.READ_ONLY);
+//		resolutionCombo.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+//				int resolution = resolutionCombo.getSelectionIndex();
+//				resolution = 11;//写死分辨率
+//				System.out.println("SetResolution() resolution:" + resolution);
+//				boolean ret = ocx1.SetResolution(Device, resolution);
+//				System.out.println("ocx1.SetResolution() ret:" + ret);
+//				if(ret) {
+//					System.out.println("ocx1.SetResolution() success.");
+//				}
+//			}
+//		});
 
 //		openBtn = new Button(group, SWT.NONE);
 //		openBtn.setText("预览视频");
@@ -866,35 +873,36 @@ public class eloamComMain {
 		boolean ret = ocx1.InitDev();
 		System.out.println("ocx1.InitDev() ret:" + ret);
 		if (ret) {
-			ret = ocx1.OpenVideoEx(0, 1, 11);
+			ret = ocx1.OpenVideoEx(0, 1, 11);//写死11
 			System.out.println("ocx1.OpenVideo() ret:" + ret);
 			int rst = ocx1.GetState(0);
 			System.out.println("ocx1.GetState() rst:" + rst);
 
 			// 获取分辨率
-			deviceCombo.removeAll();
-			deviceCombo.add(devs[0], 0);
-//			deviceCombo.add(devs[1], 1);
+//			deviceCombo.removeAll();
+//			deviceCombo.add(devs[0], 0);
+////			deviceCombo.add(devs[1], 1);
+//
+//			deviceCombo.select(0);
+//			Device = deviceCombo.getSelectionIndex();
+			Device = 0;
 
-			deviceCombo.select(0);
-			Device = deviceCombo.getSelectionIndex();
-
-			modeCombo.removeAll();
-//			modeCombo.add("0-YUY2模式");
-			modeCombo.add("1-MJPG模式");
-			modeCombo.select(0);
+//			modeCombo.removeAll();
+////			modeCombo.add("0-YUY2模式");
+//			modeCombo.add("1-MJPG模式");
+//			modeCombo.select(0);
 
 //			long result = ocx1.GetResolutionNumberEx(Device, modeCombo.getSelectionIndex());
 			long result = ocx1.GetResolutionNumberEx(Device, 1);//写死1 即"1-MJPG模式"
 
-			int count = 0;
-			count = (int)result;
-
-			resolutionCombo.removeAll();
-			String res;
-			res = ocx1.GetResolution(Device, 11);
-			resolutionCombo.add(res);//只添加11 即1024*768
-			resolutionCombo.select(0);
+//			int count = 0;
+//			count = (int)result;
+//
+//			resolutionCombo.removeAll();
+//			String res;
+//			res = ocx1.GetResolution(Device, 11);
+//			resolutionCombo.add(res);//只添加11 即1024*768
+//			resolutionCombo.select(0);
 //			for (int i = 0; i < count; i++) {
 //				res = ocx1.GetResolution(Device, i);
 //				resolutionCombo.add(res);

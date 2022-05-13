@@ -372,20 +372,41 @@ public class eloamViewOCX {
 
 	}
 
+	//设置唯一编码
+	public boolean SetEncryptedNumber() {
+		int mid[] = _auto.getIDsOfNames(new String[] { "SetEncryptedNumber" });
+		int id = mid[0];
+
+		if (id < 0)
+			return false;
+		Variant[] rgvarg = new Variant[2];
+		long SetFlat = 1;
+//		String EncryptedNumber = "CA2184F0-5A78-4D81-80F2-B0A7BFC74FBF";
+		int EncryptedNumber = 123;
+		System.out.println("id:"+id);
+
+		rgvarg[0] = new Variant(SetFlat);
+		rgvarg[1] = new Variant(EncryptedNumber);
+		Variant ret = _auto.invoke(id, rgvarg);
+		System.out.println(ret);
+
+		return ret.getBoolean();
+	}
+
 	//获取唯一编码
-//	public long GetEncryptedNumber() {
-//		int mid[] = _auto.getIDsOfNames(new String[] { "GetEncryptedNumber" });
-//		int id = mid[0];
-//		System.out.println("id:"+id);
-//
-//		if (id < 0)
-//			return -1;
-//		Variant[] rgvarg = new Variant[0];
-//		Variant ret = _auto.invoke(id, rgvarg);
-//		System.out.println("ret:"+ret);
-//
-//		return ret.getLong();
-//	}
+	public long GetEncryptedNumber() {
+		int mid[] = _auto.getIDsOfNames(new String[] { "GetEncryptedNumber" });
+		int id = mid[0];
+		System.out.println("id:"+id);
+
+		if (id < 0)
+			return -1;
+		Variant[] rgvarg = new Variant[0];
+		Variant ret = _auto.invoke(id, rgvarg);
+		System.out.println("ret:"+ret);
+
+		return ret.getLong();
+	}
 
 
 	public String GetBarcodeCount(long iDev, long iResolutoin) {
