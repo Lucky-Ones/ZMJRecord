@@ -43,6 +43,10 @@ public class eloamComMain {
 	//	private Dispatch EloamGlobal;
 	private int Device;// 当前播放视频设备
 	private int circleTimes = 100000;
+	private String stopPhotoSite;
+	private String lablePhotoSite;
+	private String VideoSite;
+	private int stopTest=0;
 	private String[] devs = {"0-主摄像头", "1-副摄像头"};// 设备列表
 
 	private Shell shell;
@@ -57,6 +61,8 @@ public class eloamComMain {
 
 
 	private Label devicelListLabel;
+	private Label messageLabel;
+
 	private Combo deviceCombo;
 
 	private Label resolutionLabel;
@@ -123,7 +129,8 @@ public class eloamComMain {
 		InitDevices();
 
 		shell.open();
-		ocx1.SetPreviewWindow(Device, 300, 300, 3000, 3000);//固定选框
+		boolean ret = ocx1.SetPreviewWindow(Device, 100, 100, 800, 600);//固定选框
+
 
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -175,6 +182,8 @@ public class eloamComMain {
 
 		devicelListLabel = new Label(group, SWT.NONE);
 		devicelListLabel.setText("设备列表:");
+
+
 
 
 		deviceCombo = new Combo(group, SWT.READ_ONLY);
@@ -379,6 +388,7 @@ public class eloamComMain {
 
 					String sampleText = SampleText.getText();//样品编号
 					String placeText = PlaceText.getText();//实验地点
+					messageLabel.setText("");
 
 
 					if (sampleText.isEmpty() || placeText.isEmpty()) {
@@ -420,6 +430,8 @@ public class eloamComMain {
 								session1.commit();
 								session1.close();
 
+								stopTest =0;
+								circleTimes =10000;
 
 								for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 									Date dt = new Date();
@@ -487,12 +499,25 @@ public class eloamComMain {
 										session4.close();
 
 
-										MessageBox mb = new MessageBox(shell,SWT.NONE);
-										mb.setText("提示");
-										mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
-										mb.open();
+//										MessageBox mb = new MessageBox(shell,SWT.NONE);
+//										mb.setText("提示");
+//										mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
+//										mb.open();
+//										messageLabel.setText("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
 
-
+										stopTest = 1;
+										stopPhotoSite=fileName2;
+										lablePhotoSite=picture_id_2;
+										VideoSite=fileName1;
+										Display.getDefault().syncExec(new Runnable() {
+											public void run() {
+//											messageLabel.setText("finish");
+												MessageBox mb = new MessageBox(shell, SWT.NONE);
+												mb.setText("提示");
+												mb.setMessage("测算结束，停止图片保存至 " + stopPhotoSite + "\n标注图片保存至：" + lablePhotoSite + "\n视频文件保存至：" + VideoSite);
+												mb.open();
+											}
+										});
 
 										break;//一致跳出循环停止拍照，写好后把上面for循环改为死循环
 									}else{
@@ -508,6 +533,17 @@ public class eloamComMain {
 
 						});
 						tRecordAndPhoto.start();
+
+//						for (;;){
+//							if (stopTest == 1) {
+//								MessageBox mb = new MessageBox(shell, SWT.NONE);
+//								mb.setText("提示");
+//								mb.setMessage("测算结束，停止图片保存至 " + stopPhotoSite + "\n标注图片保存至：" + lablePhotoSite + "\n视频文件保存至：" + VideoSite);
+//								mb.open();
+//								break;
+//							}
+//							if(circleTimes==0) break;
+//						}
 					}
 
 
@@ -589,6 +625,7 @@ public class eloamComMain {
 
 				String sampleText = SampleText.getText();//样品编号
 				String placeText = PlaceText.getText();//实验地点
+				messageLabel.setText("");
 
 
 				if (sampleText.isEmpty() || placeText.isEmpty()) {
@@ -630,6 +667,8 @@ public class eloamComMain {
 							session1.commit();
 							session1.close();
 
+							stopTest =0;
+							circleTimes =10000;
 
 							for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 								Date dt = new Date();
@@ -697,10 +736,23 @@ public class eloamComMain {
 									session4.close();
 
 
-									MessageBox mb = new MessageBox(shell,SWT.NONE);
-									mb.setText("提示");
-									mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
-									mb.open();
+//									MessageBox mb = new MessageBox(shell,SWT.NONE);
+//									mb.setText("提示");
+//									mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
+//									mb.open();
+									stopTest = 1;
+									stopPhotoSite=fileName2;
+									lablePhotoSite=picture_id_2;
+									VideoSite=fileName1;
+									Display.getDefault().syncExec(new Runnable() {
+										public void run() {
+//											messageLabel.setText("finish");
+											MessageBox mb = new MessageBox(shell, SWT.NONE);
+											mb.setText("提示");
+											mb.setMessage("测算结束，停止图片保存至 " + stopPhotoSite + "\n标注图片保存至：" + lablePhotoSite + "\n视频文件保存至：" + VideoSite);
+											mb.open();
+										}
+									});
 
 
 
@@ -718,6 +770,17 @@ public class eloamComMain {
 
 					});
 					tRecordAndPhoto.start();
+
+//					for (;;){
+//						if (stopTest == 1) {
+//							MessageBox mb = new MessageBox(shell, SWT.NONE);
+//							mb.setText("提示");
+//							mb.setMessage("测算结束，停止图片保存至 " + stopPhotoSite + "\n标注图片保存至：" + lablePhotoSite + "\n视频文件保存至：" + VideoSite);
+//							mb.open();
+//							break;
+//						}
+//						if(circleTimes==0) break;
+//					}
 				}
 			}
 		});
@@ -737,6 +800,8 @@ public class eloamComMain {
 				mb.open();
 			}
 		});
+
+		messageLabel = new Label(group,SWT.NONE);
 
 //		takingPicturesBtn = new Button(group, SWT.NONE);
 //		takingPicturesBtn.setText("拍  照");
