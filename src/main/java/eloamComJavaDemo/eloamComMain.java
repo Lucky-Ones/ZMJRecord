@@ -516,6 +516,7 @@ public class eloamComMain {
 										stopPhotoSite=fileName2;
 										lablePhotoSite=picture_id_2;
 										VideoSite=fileName1;
+										ocx1.StopRecord();
 										Display.getDefault().syncExec(new Runnable() {
 											public void run() {
 //											messageLabel.setText("finish");
@@ -751,6 +752,7 @@ public class eloamComMain {
 									stopPhotoSite=fileName2;
 									lablePhotoSite=picture_id_2;
 									VideoSite=fileName1;
+									ocx1.StopRecord();
 									Display.getDefault().syncExec(new Runnable() {
 										public void run() {
 //											messageLabel.setText("finish");
