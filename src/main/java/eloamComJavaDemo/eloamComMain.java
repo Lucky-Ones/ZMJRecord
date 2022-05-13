@@ -439,7 +439,25 @@ public class eloamComMain {
 
 								stopTest =0;
 								circleTimes =10000;
+								for (int i=0;i<4;i++) {//这里设置拍4张照片，前四张不计算面积
 
+									Date dt = new Date();
+									DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+									String nowTime = "";
+									nowTime = df.format(dt);
+									DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+									String photoName = dfs.format(dt);
+
+									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+									String fileName3 = nowTime + ".jpg";
+									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
+									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+									if(ret2) {
+										ocx2.Add(fileName2);
+									}
+
+
+								}
 								for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 									Date dt = new Date();
 									DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -677,6 +695,27 @@ public class eloamComMain {
 
 							stopTest =0;
 							circleTimes =10000;
+
+							for (int i=0;i<4;i++) {//这里设置拍4张照片，前四张不计算面积
+
+								Date dt = new Date();
+								DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+								String nowTime = "";
+								nowTime = df.format(dt);
+								DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+								String photoName = dfs.format(dt);
+
+								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+								String fileName3 = nowTime + ".jpg";
+								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
+								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
+								if(ret2) {
+									ocx2.Add(fileName2);
+								}
+
+
+							}
+
 
 							for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 								Date dt = new Date();
