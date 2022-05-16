@@ -5,6 +5,7 @@
 /*运行时请选择[run],[run As ], [JAVA Application]*/
 package eloamComJavaDemo;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -21,6 +22,7 @@ import dao.PictureMapper;
 import eloamComJavaDemo.bean.ImageInfo;
 import eloamComJavaDemo.utils.AreaCalculation;
 import eloamComJavaDemo.utils.CircleCalculation;
+import eloamComJavaDemo.utils.GetLocationExample;
 import org.apache.ibatis.session.SqlSession;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
@@ -28,6 +30,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.*;
+import org.lionsoul.ip2region.DbMakerConfigException;
 import org.opencv.core.Mat;
 import pojo.Experiment;
 import pojo.Picture;
@@ -69,6 +72,8 @@ public class eloamComMain {
 	private Combo resolutionCombo;
 
 	private Label modeLabel;
+
+	private Label tipsLabel;
 	private Combo modeCombo;
 
 	private Button openBtn;
@@ -142,7 +147,7 @@ public class eloamComMain {
 
 	protected void createContents() {
 		shell = new Shell();
-		shell.setText("eloamComJavaDemo");
+		shell.setText("浆体流动测试软件");
 		shell.setSize(800, 750);
 		shell.addShellListener(new ShellAdapter() {
 
@@ -168,18 +173,27 @@ public class eloamComMain {
 
 
 
-
+		String place="IP";
+		try {
+			place = GetLocationExample.getBlock();//IP定位
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		} catch (DbMakerConfigException ex) {
+			throw new RuntimeException(ex);
+		}
 		//输入框 实验地点，样品编号
 		PlaceLabel = new Label(group,SWT.NONE);
 		PlaceLabel.setText("实验地点：");
 //		PlaceLabel.setBounds(65, 100, 40,20);
 
 		SampleText = new Text(group, SWT.SINGLE);
+		SampleText.setText(place);
 
 		SampleLabel = new Label(group,SWT.NONE);
 		SampleLabel.setText("样品编号：");
 //		SampleLabel.setBounds(65, 165, 40, 20);
 		PlaceText = new Text(group, SWT.SINGLE);
+
 
 //		devicelListLabel = new Label(group, SWT.NONE);
 //		devicelListLabel.setText("设备列表:");
@@ -201,19 +215,13 @@ public class eloamComMain {
 //
 //				int count = 0;
 //				count = (int)result;
-////
-////				resolutionCombo.removeAll();
-////				String res;
-////				for (int i = 0; i < count; i++) {
-////					res = ocx1.GetResolution(Device, i);
-////					resolutionCombo.add(res);
-////				}
-////				resolutionCombo.select(0);
 //
 //				resolutionCombo.removeAll();
 //				String res;
-//				res = ocx1.GetResolution(Device, 4);
-//				resolutionCombo.add(res);//只添加11 即1024*768
+//				for (int i = 0; i < count; i++) {
+//					res = ocx1.GetResolution(Device, i);
+//					resolutionCombo.add(res);
+//				}
 //				resolutionCombo.select(0);
 //
 //				Device = deviceCombo.getSelectionIndex();
@@ -341,8 +349,8 @@ public class eloamComMain {
 
 		attributeBtn = new Button(group, SWT.NONE);
 		attributeBtn.setText("属性");
-		attributeBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+		attributeBtn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				Device = deviceCombo.getSelectionIndex();
 				boolean ret = ocx1.ShowProperty(Device);
 				if(ret) {
@@ -380,6 +388,7 @@ public class eloamComMain {
 //		});
 
 		//拍照录像空格监听代码
+		String finalPlace = place;
 		Display.getDefault().addFilter(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event e) {
 				if (e.keyCode == ' ' ) {
@@ -395,7 +404,8 @@ public class eloamComMain {
 
 					String sampleText = SampleText.getText();//样品编号
 					String placeText = PlaceText.getText();//实验地点
-					messageLabel.setText("");
+//					messageLabel.setText("");
+
 
 
 					if (sampleText.isEmpty() || placeText.isEmpty()) {
@@ -407,8 +417,6 @@ public class eloamComMain {
 					else{
 						System.out.println("实验地点:"+placeText);
 						System.out.println("样品编号:"+sampleText);
-
-
 						Thread tRecordAndPhoto;
 
 						tRecordAndPhoto = new Thread(() ->{
@@ -431,7 +439,7 @@ public class eloamComMain {
 								SqlSession session1 = MybatisUtils.getSession();
 								ExperimentMapper mapper1 = session1.getMapper(ExperimentMapper.class);
 
-								Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1,placeText,sampleText);
+								Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1, finalPlace,sampleText);
 								mapper1.addExperiment(experiment);
 								int experiment_id = experiment.getExperiment_id();//本次实验id:  experiment_id
 								session1.commit();
@@ -439,6 +447,7 @@ public class eloamComMain {
 
 								stopTest =0;
 								circleTimes =10000;
+
 								for (int i=0;i<4;i++) {//这里设置拍4张照片，前四张不计算面积
 
 									Date dt = new Date();
@@ -458,6 +467,7 @@ public class eloamComMain {
 
 
 								}
+
 								for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 									Date dt = new Date();
 									DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -644,14 +654,15 @@ public class eloamComMain {
 
 		RecordAndPhotoBtn = new Button(group, SWT.NONE);
 		RecordAndPhotoBtn.setText("开始");
-		RecordAndPhotoBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt .events.SelectionEvent e)  {
+		String finalPlace1 = place;
+		RecordAndPhotoBtn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e)  {
 				Device = deviceCombo.getSelectionIndex();
 
 
 				String sampleText = SampleText.getText();//样品编号
 				String placeText = PlaceText.getText();//实验地点
-				messageLabel.setText("");
+//
 
 
 				if (sampleText.isEmpty() || placeText.isEmpty()) {
@@ -687,7 +698,7 @@ public class eloamComMain {
 							SqlSession session1 = MybatisUtils.getSession();
 							ExperimentMapper mapper1 = session1.getMapper(ExperimentMapper.class);
 
-							Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1,placeText,sampleText);
+							Experiment experiment = new Experiment(1,video_name,fileName1,nowTime1, finalPlace1,sampleText);
 							mapper1.addExperiment(experiment);
 							int experiment_id = experiment.getExperiment_id();//本次实验id:  experiment_id
 							session1.commit();
@@ -715,7 +726,6 @@ public class eloamComMain {
 
 
 							}
-
 
 							for (int i=0;i<circleTimes;i++){//这里设置拍10张照片，数据库连接好后改为死循环
 								Date dt = new Date();
@@ -836,8 +846,8 @@ public class eloamComMain {
 
 		StopRecordBtn = new Button(group, SWT.NONE);
 		StopRecordBtn.setText("取消测量");
-		StopRecordBtn.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+		StopRecordBtn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 
 				circleTimes = 0;
 
@@ -849,7 +859,11 @@ public class eloamComMain {
 			}
 		});
 
-		messageLabel = new Label(group,SWT.NONE);
+		tipsLabel = new Label(group, SWT.NONE);
+		tipsLabel.setText("操作提示:\n请将参照纸板\n完全放入红色选框！");
+
+
+//		messageLabel = new Label(group,SWT.NONE);
 
 //		takingPicturesBtn = new Button(group, SWT.NONE);
 //		takingPicturesBtn.setText("拍  照");
@@ -927,7 +941,7 @@ public class eloamComMain {
 //			deviceCombo.select(0);
 //			Device = deviceCombo.getSelectionIndex();
 			Device = 0;
-
+//
 //			modeCombo.removeAll();
 ////			modeCombo.add("0-YUY2模式");
 //			modeCombo.add("1-MJPG模式");
@@ -971,4 +985,7 @@ public class eloamComMain {
 			System.out.println("ocx1.DeInitDev() success.");
 		}
 	}
+
+
+
 }

@@ -123,6 +123,7 @@ public class CircleCalculation {
 
 
         //index=2,差不多每个区域都分内轮廓和外轮廓。
+
         ImageInfo imageInfo = findContoursAndDraw(src,edges,2,originalImagePath,maskedImagePath);
 
         return imageInfo;
