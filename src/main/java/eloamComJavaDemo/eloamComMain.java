@@ -5,7 +5,7 @@
 /*运行时请选择[run],[run As ], [JAVA Application]*/
 package eloamComJavaDemo;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -98,6 +98,7 @@ public class eloamComMain {
 	private Button CheckDeskewBtn;
 
 	private Button IDcardBtn;
+	private Button resetCheek;
 
 	private Group group;
 
@@ -134,7 +135,7 @@ public class eloamComMain {
 		InitDevices();
 
 		shell.open();
-		boolean ret = ocx1.SetPreviewWindow(Device, 100, 100, 800, 600);//固定选框
+		boolean ret = ocx1.SetPreviewWindow(Device, 160, 50, 680, 680);//固定选框
 		System.out.println(ret);
 
 
@@ -351,11 +352,23 @@ public class eloamComMain {
 		attributeBtn.setText("属性");
 		attributeBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Device = deviceCombo.getSelectionIndex();
+//				Device = deviceCombo.getSelectionIndex();
+				Device = 0;
 				boolean ret = ocx1.ShowProperty(Device);
 				if(ret) {
 					System.out.println("ocx1.ShowProperty(Device) ret:" + ret);
 				}
+			}
+		});
+
+		resetCheek = new Button(group, SWT.NONE);
+		resetCheek.setText("重置边框");
+		resetCheek.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+//				Device = deviceCombo.getSelectionIndex();
+				Device = 0;
+
+				ocx1.SetPreviewWindow(Device, 160, 50, 680, 680);//固定选框
 			}
 		});
 
@@ -399,8 +412,8 @@ public class eloamComMain {
 //					box.setText("提示信息" );
 //					box.setMessage("按空格键了" );
 //					box.open();
-					Device = deviceCombo.getSelectionIndex();
-
+//					Device = deviceCombo.getSelectionIndex();
+					Device = 0;
 
 					String sampleText = SampleText.getText();//样品编号
 					String placeText = PlaceText.getText();//实验地点
@@ -426,7 +439,7 @@ public class eloamComMain {
 								String nowTime1 = "";
 								nowTime1 = df1.format(dt1);//start_time
 								String video_name = nowTime1 + ".mp4";//video_name
-								String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
+								String fileName1 = System.getProperty("exe.path")+"results\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
 								long A  = 60;
 								boolean ret = ocx1.StartRecord(fileName1,A);
 								if(ret) {
@@ -457,7 +470,7 @@ public class eloamComMain {
 									DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 									String photoName = dfs.format(dt);
 
-									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+									String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
 									String fileName3 = nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -476,7 +489,8 @@ public class eloamComMain {
 									DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 									String photoName = dfs.format(dt);
 
-									String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+									String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
+									String fileName4 = System.getProperty("exe.path")+"results\\out\\" +"p"+ nowTime + ".jpg";
 									String fileName3 = nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -519,7 +533,42 @@ public class eloamComMain {
 										String picture_site= mapper4.getSiteById(picture_id);
 										session5.close();
 										CircleCalculation circle = new CircleCalculation();
-										String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+"mp"+photoName+".jpg";
+										String picture_id_2 = System.getProperty("exe.path")+"results\\out\\"+"mp"+photoName+".jpg";
+
+										//拷贝最后一张图片至out文件夹
+										//源文件路径
+										File source = new File(fileName2);
+										//目标文件路径
+										File target = new File(fileName4);
+
+										//如果源文件不存在则不能拷贝
+										if(!source.exists()){
+											return;
+										}
+										//如果目标文件目录不存在则创建
+										if(!target.getParentFile().exists()){
+											target.getParentFile().mkdirs();
+										}
+
+										try {
+											//实现文件的拷贝
+											InputStream inputStream = new FileInputStream(source);
+											OutputStream outputStream = new FileOutputStream(target);
+											int temp = 0;
+											//每次读取1024个字节
+											byte[] data = new byte[1024];
+											//将每次读取的数据保存到字节数组里面，并且返回读取的个数
+											while ((temp = inputStream.read(data)) != -1){
+												//输出数组
+												outputStream.write(data,0,temp);
+											}
+
+											inputStream.close();
+											outputStream.close();
+										} catch (IOException e1) {
+											e1.printStackTrace();
+										}
+
 										ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
 										String R1 = String.valueOf(imageInfo.getR1());
 										String R2 = String.valueOf(imageInfo.getR2());
@@ -541,7 +590,7 @@ public class eloamComMain {
 //										messageLabel.setText("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
 
 										stopTest = 1;
-										stopPhotoSite=fileName2;
+										stopPhotoSite=fileName4;
 										lablePhotoSite=picture_id_2;
 										VideoSite=fileName1;
 										ocx1.StopRecord();
@@ -657,8 +706,8 @@ public class eloamComMain {
 		String finalPlace1 = place;
 		RecordAndPhotoBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e)  {
-				Device = deviceCombo.getSelectionIndex();
-
+//				Device = deviceCombo.getSelectionIndex();
+				Device = 0;
 
 				String sampleText = SampleText.getText();//样品编号
 				String placeText = PlaceText.getText();//实验地点
@@ -685,7 +734,7 @@ public class eloamComMain {
 							String nowTime1 = "";
 							nowTime1 = df1.format(dt1);//start_time
 							String video_name = nowTime1 + ".mp4";//video_name
-							String fileName1 = System.getProperty("exe.path")+"\\zmj\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
+							String fileName1 = System.getProperty("exe.path")+"results\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
 							long A  = 60;
 							boolean ret = ocx1.StartRecord(fileName1,A);
 							if(ret) {
@@ -716,7 +765,7 @@ public class eloamComMain {
 								DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 								String photoName = dfs.format(dt);
 
-								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+								String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
 								String fileName3 = nowTime + ".jpg";
 								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
@@ -735,8 +784,10 @@ public class eloamComMain {
 								DateFormat dfs = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 								String photoName = dfs.format(dt);
 
-								String fileName2 = System.getProperty("exe.path")+"\\zmj\\photo\\" +"p"+ nowTime + ".jpg";
+								String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
+								String fileName4 = System.getProperty("exe.path")+"results\\out\\" +"p"+ nowTime + ".jpg";
 								String fileName3 = nowTime + ".jpg";
+
 								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
 								if(ret2) {
@@ -778,7 +829,43 @@ public class eloamComMain {
 									String picture_site= mapper4.getSiteById(picture_id);
 									session5.close();
 									CircleCalculation circle = new CircleCalculation();
-									String picture_id_2 = System.getProperty("exe.path")+"\\zmj\\out\\"+"mp"+photoName+".jpg";
+									String picture_id_2 = System.getProperty("exe.path")+"results\\out\\"+"mp"+photoName+".jpg";
+
+									//拷贝最后一张图片至out文件夹
+									//源文件路径
+									File source = new File(fileName2);
+									//目标文件路径
+									File target = new File(fileName4);
+
+									//如果源文件不存在则不能拷贝
+									if(!source.exists()){
+										return;
+									}
+									//如果目标文件目录不存在则创建
+									if(!target.getParentFile().exists()){
+										target.getParentFile().mkdirs();
+									}
+
+									try {
+										//实现文件的拷贝
+										InputStream inputStream = new FileInputStream(source);
+										OutputStream outputStream = new FileOutputStream(target);
+										int temp = 0;
+										//每次读取1024个字节
+										byte[] data = new byte[1024];
+										//将每次读取的数据保存到字节数组里面，并且返回读取的个数
+										while ((temp = inputStream.read(data)) != -1){
+											//输出数组
+											outputStream.write(data,0,temp);
+										}
+
+										inputStream.close();
+										outputStream.close();
+									} catch (IOException e1) {
+										e1.printStackTrace();
+									}
+
+
 									ImageInfo imageInfo =  circle.canny(picture_site,picture_id_2);
 									String R1 = String.valueOf(imageInfo.getR1());
 									String R2 = String.valueOf(imageInfo.getR2());
@@ -798,7 +885,7 @@ public class eloamComMain {
 //									mb.setMessage("测算结束，停止图片保存至 "+fileName2+"\n标注图片保存至："+picture_id_2+"\n视频文件保存至："+fileName1);
 //									mb.open();
 									stopTest = 1;
-									stopPhotoSite=fileName2;
+									stopPhotoSite=fileName4;
 									lablePhotoSite=picture_id_2;
 									VideoSite=fileName1;
 									ocx1.StopRecord();

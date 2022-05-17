@@ -25,8 +25,8 @@ public class GetLocationExample {
         //获取ip库的位置（放在src下）（直接通过测试类获取文件Ip2RegionTest为测试类）
 //        String dbfile = GetLocationExample.class.getResource("/ip2region.db").getPath();
 //        DbSearcher searcher = new DbSearcher(config, dbfile);
-//        DbSearcher searcher = new DbSearcher(config, System.getProperty("exe.path")+"/ip2region.db");
-        DbSearcher searcher = new DbSearcher(config, "D:\\project\\javaProject\\ZMJ\\ZMJRecord.exe\\ip2region.db");
+        DbSearcher searcher = new DbSearcher(config, System.getProperty("exe.path")+"ip2region.db");
+//        DbSearcher searcher = new DbSearcher(config, "D:\\project\\javaProject\\ZMJ\\ZMJRecord.exe\\ip2region.db");
         //采用Btree搜索
         DataBlock block = searcher.btreeSearch(getOutIPV4());
         //打印位置信息（格式：国家|大区|省份|城市|运营商）
