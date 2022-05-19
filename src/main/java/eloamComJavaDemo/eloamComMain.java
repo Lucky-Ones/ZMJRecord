@@ -135,7 +135,7 @@ public class eloamComMain {
 		InitDevices();
 
 		shell.open();
-		boolean ret = ocx1.SetPreviewWindow(Device, 160, 50, 680, 680);//固定选框
+		boolean ret = ocx1.SetPreviewWindow(Device, 160, 50, 690, 690);//固定选框
 		System.out.println(ret);
 
 
@@ -368,7 +368,7 @@ public class eloamComMain {
 //				Device = deviceCombo.getSelectionIndex();
 				Device = 0;
 
-				ocx1.SetPreviewWindow(Device, 160, 50, 680, 680);//固定选框
+				ocx1.SetPreviewWindow(Device, 160, 50, 690, 690);//固定选框
 			}
 		});
 
@@ -438,7 +438,7 @@ public class eloamComMain {
 								DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 								String nowTime1 = "";
 								nowTime1 = df1.format(dt1);//start_time
-								String video_name = nowTime1 + ".mp4";//video_name
+								String video_name = "v"+nowTime1 + ".mp4";//video_name
 								String fileName1 = System.getProperty("exe.path")+"results\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
 								long A  = 60;
 								boolean ret = ocx1.StartRecord(fileName1,A);
@@ -471,7 +471,7 @@ public class eloamComMain {
 									String photoName = dfs.format(dt);
 
 									String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
-									String fileName3 = nowTime + ".jpg";
+									String fileName3 = "p"+ nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
 									if(ret2) {
@@ -491,7 +491,7 @@ public class eloamComMain {
 
 									String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
 									String fileName4 = System.getProperty("exe.path")+"results\\out\\" +"p"+ nowTime + ".jpg";
-									String fileName3 = nowTime + ".jpg";
+									String fileName3 = "p"+ nowTime + ".jpg";
 									boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 									System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
 									if(ret2) {
@@ -733,7 +733,7 @@ public class eloamComMain {
 							DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 							String nowTime1 = "";
 							nowTime1 = df1.format(dt1);//start_time
-							String video_name = nowTime1 + ".mp4";//video_name
+							String video_name = "v"+ nowTime1 + ".mp4";//video_name
 							String fileName1 = System.getProperty("exe.path")+"results\\record\\" +"v"+ nowTime1 + ".mp4";//video_site
 							long A  = 60;
 							boolean ret = ocx1.StartRecord(fileName1,A);
@@ -766,7 +766,7 @@ public class eloamComMain {
 								String photoName = dfs.format(dt);
 
 								String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
-								String fileName3 = nowTime + ".jpg";
+								String fileName3 = "p"+nowTime + ".jpg";
 								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
 								if(ret2) {
@@ -786,7 +786,7 @@ public class eloamComMain {
 
 								String fileName2 = System.getProperty("exe.path")+"results\\photo\\" +"p"+ nowTime + ".jpg";
 								String fileName4 = System.getProperty("exe.path")+"results\\out\\" +"p"+ nowTime + ".jpg";
-								String fileName3 = nowTime + ".jpg";
+								String fileName3 = "p"+nowTime + ".jpg";
 
 								boolean ret2 = ocx1.Scan(Device, fileName2, 0);
 								System.out.println("i:"+i+",ocx1.Scan(Device, fileName, 0) ret:" + ret);
