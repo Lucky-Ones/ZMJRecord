@@ -1,8 +1,12 @@
 package eloamComJavaDemo;
 
+import dao.PictureMapper;
 import eloamComJavaDemo.utils.AreaCalculation;
+import org.apache.ibatis.session.SqlSession;
 import org.opencv.core.Mat;
+import pojo.Picture;
 import sun.net.www.content.image.png;
+import utils.MybatisUtils;
 
 import java.awt.*;
 import java.net.URL;
@@ -21,6 +25,12 @@ public class Test {
         System.load("F:\\code\\javaProject\\zmj\\ZMJRecord\\src\\main\\resources\\lib\\opencv\\opencv_java455.dll");
 
 
+//        SqlSession session2 = MybatisUtils.getSession();
+//        PictureMapper mapper2 = session2.getMapper(PictureMapper.class);
+//        Picture picture = new Picture("fileName3","nowTime","fileName2","area",16);
+//        mapper2.addPicture(picture);
+//        session2.commit(); //提交事务
+//        session2.close();
 
 
 

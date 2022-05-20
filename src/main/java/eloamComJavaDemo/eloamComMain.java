@@ -106,6 +106,7 @@ public class eloamComMain {
 
 	public static void main(String[] args) {
 		eloamComMain demo = new eloamComMain();
+		copyXml();
 		demo.open();
 	}
 
@@ -1010,7 +1011,44 @@ public class eloamComMain {
 		ocx2.SetClientSize(600, 200);
 	}
 
+	public static void copyXml(){
+		//拷贝xml
+		//源文件路径
+		File source = new File(System.getProperty("exe.path")+"mybatis-config.xml");
+//		File source = new File("D:\\project\\javaProject\\ZMJ\\ZMJRecord.exe\\mybatis-config.xml");
+		//目标文件路径
+		File target = new File("src/main/resources/mybatis-config.xml");
+
+		//如果源文件不存在则不能拷贝
+		if(!source.exists()){
+			return ;
+		}
+
+
+		try {
+			//实现文件的拷贝
+			InputStream inputStream = new FileInputStream(source);
+			OutputStream outputStream = new FileOutputStream(target);
+			int temp = 0;
+			//每次读取1024个字节
+			byte[] data = new byte[1024];
+			//将每次读取的数据保存到字节数组里面，并且返回读取的个数
+			while ((temp = inputStream.read(data)) != -1){
+				//输出数组
+				outputStream.write(data,0,temp);
+			}
+
+			inputStream.close();
+			outputStream.close();
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
 	public void InitDevices() {
+
 		//boolean ret = Dispatch.call(EloamView, "InitDev").getBoolean();
 		boolean ret = ocx1.InitDev();
 		System.out.println("ocx1.InitDev() ret:" + ret);

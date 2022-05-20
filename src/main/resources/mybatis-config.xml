@@ -1,25 +1,21 @@
-<?xml version="1.0" encoding="UTF8" ?>
+﻿<?xml version="1.0" encoding="UTF8" ?>
 <!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-config.dtd">
-
+       PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+       "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://rm-wz90qf13ikffflj3lxo.mysql.rds.aliyuncs.com:3306/jtjs?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
+   <environments default="development">
+       <environment id="development">
+           <transactionManager type="JDBC"/>
+           <dataSource type="POOLED">
+               <property name="driver" value="com.mysql.jdbc.Driver"/>
+               <property name="url" value="jdbc:mysql://rm-wz90qf13ikffflj3lxo.mysql.rds.aliyuncs.com:3306/jtjs?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
                 <property name="username" value="506_ec_jtjs"/>
                 <property name="password" value="506_ec_jtjs"/>
-            </dataSource>
-        </environment>
-    </environments>
-
-    <mappers>
-        <mapper resource="dao/PictureMapper.xml"/>
-        <mapper resource="dao/ExperimentMapper.xml"/>
-    </mappers>
-
+           </dataSource>
+       </environment>
+   </environments>
+   <mappers>
+       <mapper resource="dao/ExperimentMapper.xml"/>
+       <mapper resource="dao/PictureMapper.xml"/>
+   </mappers>
 </configuration>

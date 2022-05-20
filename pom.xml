@@ -74,6 +74,13 @@
                     </filters>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins </groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
@@ -100,6 +107,8 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
+
 
     </build>
 
